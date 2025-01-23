@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Layout Media Queries (from alsacreation.com)</title>
+
+    <style>
+
+        /* Styles généraux */
+        body {
+            font-family:Sans-serif;
+            font-size:100%;
+            background:#F1F1F1;
+        }
+        a {
+            color:#369;
+        }
+        div, p, h1 {
+            padding: 0.5em 1em;
+            margin: 1em;
+            color:#666;
+            line-height:150%;
+        }
+        p {
+            color:#000;
+            background:#fff;
+        }
+        .precisions span {
+            color: #cd023b;
+            display: none;
+            font-weight:bold;
+        }
+        h1 {
+            padding:0;
+            color:#ccc;
+            text-shadow:1px 1px 1px #aaa;
+            margin-bottom:0;
+        }
+
+
+        /* 1: max-width */
+        @media screen and (max-width: 640px) {
+            .small {
+                background: #f11a57;
+                color:#fff;
+            }
+            .precisions span.regle1 {
+                display: block;
+            }
+        }
+
+
+        /* 2: min-width */
+        @media screen and (min-width: 800px) {
+            .medium {
+                background: #f11a57;
+                color:#fff;
+            }
+            .precisions span.regle2 {
+                display: block;
+            }
+        }
+
+
+        /* 3: min-width + max-width */
+        @media screen and (min-width: 1024px) and (max-width: 1280px) {
+            .wide {
+                background: #f11a57;
+                color:#fff;
+            }
+            .precisions span.regle3 {
+                display: block;
+            }
+        }
+
+
+        /* 4: max device width */
+        @media screen and (max-device-width: 480px) {
+            .maxdevice {
+                background: #f11a57;
+                color:#fff;
+            }
+            .precisions span.regle4 {
+                display: block;
+            }
+        }
+
+
+        /* 5: orientation:portrait */
+        @media screen and (orientation:portrait) {
+            .portrait {
+                background: #f11a57;
+                color:#fff;
+            }
+            .precisions span.regle5 {
+                display: block;
+            }
+        }
+
+
+        /* 6: orientation:paysage */
+        @media screen and (orientation:landscape) {
+            .landscape {
+                background: #f11a57;
+                color:#fff;
+            }
+            .precisions span.regle6 {
+                display: block;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Démo Media Queries</h1>
+
+    <div class="precisions">Règle(s) appliquée(s) :
+        <span class="regle1">@media screen and (max-width: 640px)</span>
+        <span class="regle2">@media screen and (min-width: 800px)</span>
+        <span class="regle3">@media screen and (min-width: 1024px) and (max-width: 1280px)</span>
+        <span class="regle4">@media screen and (max-device-width: 480px)</span>
+        <span class="regle5">@media screen and (orientation:portrait)</span>
+        <span class="regle6">@media screen and (orientation:landscape)</span>
+    </div>
+
+    <p class="small">La page est affichée avec une largeur &lt; 640px</p>
+    <p class="medium">La page est affichée avec une largeur &gt; 800px</p>
+    <p class="wide">La page est affichée avec une largeur &gt; 1024px et &lt; 1280px</p>
+    <p class="maxdevice">La page est affichée sur un périphérique de maximum 480px (ex: iPhone)</p>
+    <p class="portrait">La page est affichée en portrait</p>
+    <p class="landscape">La page est affichée en paysage</p>
+
+</body>
+</html>

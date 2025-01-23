@@ -1,0 +1,128 @@
+##### 2
+
+PREFIX res: <http://dbpedia.org/resource/>
+SELECT ?s ?p
+WHERE {
+?s ?p res:Marion_Cotillard
+}
+
+##### 4
+
+PREFIX res: <http://dbpedia.org/resource/>
+PREFIX ont: <http://dbpedia.org/ontology/>
+SELECT ?s ?n
+WHERE {
+{
+?s  ont:starring res:Marion_Cotillard .
+BIND(res:Marion_Cotillard AS ?n)
+}
+UNION
+{
+?s  ont:starring res:Guillaume_Canet .
+BIND(res:Guillaume_Canet AS ?n)}
+}
+
+
+##### 5
+
+PREFIX res: <http://dbpedia.org/resource/>
+PREFIX ont: <http://dbpedia.org/ontology/>
+SELECT ?s ?n ?m
+WHERE {
+?s  ont:starring ?n .
+?s  ont:starring ?m .
+FILTER(?n = res:Marion_Cotillard and ?m = res:Guillaume_Canet)
+}
+
+
+##### 6
+
+PREFIX res: <http://dbpedia.org/resource/>
+PREFIX ont: <http://dbpedia.org/ontology/>
+SELECT ?s ?t
+WHERE {
+?s  ont:starring ?n .
+?s  ont:starring ?m .
+FILTER(?n = res:Marion_Cotillard and ?m = res:Guillaume_Canet)
+?s <http://www.w3.org/2000/01/rdf-schema#label> ?t .
+FILTER(Lang(?t)="fr")
+}
+
+
+##### 7
+
+PREFIX res: <http://dbpedia.org/resource/> 
+PREFIX ont: <http://dbpedia.org/ontology/>
+PREFIX pro: <http://dbpedia.org/property/>
+
+CONSTRUCT {
+?f ont:starring ?p .
+?f pro:starring ?p .
+?m pro:partner ?g .
+?g pro:partner ?m
+}
+
+WHERE {
+?f ont:starring ?p .
+?f pro:starring ?p .
+?m pro:partner ?g .
+?g pro:partner ?m
+FILTER(?m = res:Marion_Cotillard AND ?g = res:Guillaume_Canet)
+FILTER(?p = res:Marion_Cotillard OR ?p = res:Guillaume_Canet)
+}
+
+
+
+
+
+
+
+
+
+PREFIX res: <http://dbpedia.org/resource/>
+PREFIX ont: <http://dbpedia.org/ontology/>
+PREFIX pro: <http://dbpedia.org/property/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+CONSTRUCT {
+?s ont:starring ?p
+?s pro:starring ?p
+?s pro:partner ?p
+FILTER(?p = res:Marion_Cotillard or ?p = res:Guillaume_Canet)
+}
+WHERE {
+?s ont:starring ?p
+?s pro:starring ?p
+?s pro:partner ?p
+FILTER(?p = res:Marion_Cotillard or ?p = res:Guillaume_Canet)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

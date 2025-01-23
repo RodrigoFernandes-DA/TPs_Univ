@@ -1,0 +1,5 @@
+sujet                                           prédicat    objet                                           Information véhiculée par le triplet
+http://dbpedia.org/resource/Marion_Cotillard    BirthDate   1975-09-30                                      Quelle est la date de naissance de Marion Cotillard ?
+http://dbpedia.org/resource/Marion_Cotillard    partner     http://dbpedia.org/resource/Guillaume_Canet     Qui est le companion de Marion Cotillard ?
+
+

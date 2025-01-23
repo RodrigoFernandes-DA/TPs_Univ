@@ -1,0 +1,214 @@
+:root {
+    --primary-color: #2C7873;
+    --background-color1: #2D283E;
+    --background-color2: #4c495d;
+    --background-color3: #39344a;
+    --foreground-color1: #D1D7E0;
+    --foreground-color2: #90CCF4;
+    --foreground-color3: #5DA2D5;
+    }
+    
+body {
+    background-color: var(--background-color1);
+    font-family: Helvetica, sans-serif;
+    font-size: medium;
+    line-height: 140%;
+}
+
+article {
+    max-width: 40%;
+    margin: auto;
+    text-align: justify;
+}
+
+.Chapter {
+    border: 2px solid var(--background-color2); 
+    background-color: var(--background-color3);
+    border-top-right-radius: 10px;
+    box-shadow: 5px 5px 10px grey; 
+    padding: 1em; 
+    margin-top: 2em;
+    scroll-margin-top: 35px;
+}
+
+#Programmation_Web {
+    margin-top: 80px;
+    scroll-margin-top: 40px;
+}
+
+p,li {
+    color: var(--foreground-color1);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight:bold;
+    color: var(--foreground-color2);
+    text-transform: capitalize;
+}
+
+h1 {
+    font-size: 2.5em;
+    line-height: 180%;
+    text-decoration-line: underline;
+    text-decoration-color: var(--foreground-color2);
+    text-decoration-style: solid;
+}
+
+h2 {
+    font-size: 2em;
+    line-height: 180%;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+h3 {
+    font-size: 1.5em;
+    line-height: 180%;
+    margin-top: 5px;
+}
+
+h4 {
+    font-size: 1em;
+    line-height: 180%;
+    margin-top: 10px;
+}
+
+a {
+    color: var(--foreground-color3);
+}
+
+ul {
+    list-style-position: outside;
+    padding: 20px;
+  }
+
+ul#Menu {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    background-color: var(--background-color2);
+    width: 100%;
+    /* position: sticky; */
+    position: fixed;
+    top: 0;
+    justify-content: center;
+    align-items: center;
+}
+
+ul#Menu > li {
+    float: left;
+    border-right: 1px solid #bbb;
+}
+
+ul#Menu > li a{
+    display: block;
+    color:var(--foreground-color1);
+    text-align: center;
+    padding: 5px 16px;
+    text-decoration: none;
+    transition: text-shadow 2s;
+}
+
+ul#Menu > li:first-child {
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+    border: 0px 0px 0px 0px;
+}
+
+ul#Menu > li:last-child, ul#Menu > li:first-child {
+    border-right: none;
+  }
+
+ul#Menu > li a:hover {
+    background-color: var(--background-color1);
+    text-shadow:2px 2px 5px var(--foreground-color1)
+}
+
+ul#Menu > li ul {
+    visibility: hidden;
+    display: none;
+}
+
+ul#Menu > li img {
+    background-color: var(--background-color2);
+    border-radius: inherit;
+    margin-left: inherit;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+    border: 0px 0px 0px 0px;
+}
+
+.target-offset {
+    height: 20px; 
+    margin-top: -20px; 
+    display: block; 
+    /* visibility: hidden; Em vez de display: none */
+}
+
+#Programmation_Web:target .target-offset,
+#Langages_de_balisage:target .target-offset,
+#Programmation_web_côté_client:target .target-offset,
+#Programmation_web_côté_serveur:target .target-offset,
+#Technologie_Ajax:target .target-offset {
+    display: none;
+}
+
+#ImgFloat {
+    float: right;
+    max-width: 100%; 
+    height: auto; 
+    display: block; 
+}
+
+img {
+    background-color: var(--foreground-color1);
+    border-radius: 15px;
+    margin-left: 10px;
+    max-width: 100%;
+}
+
+#Technologie_Ajax img {
+   margin-top: 20px; 
+   text-align: center; 
+   justify-content: center;
+}
+
+footer {
+    margin-top: 40px;
+    text-align: center; 
+    padding: 20px; 
+    background: linear-gradient(#2D283E, #4c495d);
+    /* color: var(--foreground-color1);  */
+}
+
+footer p, footer h2, footer ul {
+    text-align: center; 
+    list-style-position:inherit;
+}
+
+#Footer ul {
+    list-style-type: none; /* Remove os pontos da lista */
+    padding: 0; /* Remove o padding padrão */
+}
+
+#Footer ul li {
+    color: var(--foreground-color1); /* Aplica a cor dos artigos ao texto */
+}
+
+#Footer a {
+    color: var(--foreground-color1); /* Remove o sublinhado e ajusta a cor */
+    text-decoration: none;
+    transition: color 0.3s, text-decoration 0.3s; /* Suaviza a transição */
+}
+
+#Footer a:hover {
+    color: var(--foreground-color2); /* Cor do título ao passar o mouse */
+    text-decoration: underline; /* Adiciona sublinhado no hover */
+}
+
+#Footer p {
+    margin-top: 20px;
+}

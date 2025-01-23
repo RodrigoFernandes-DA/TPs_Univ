@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rdf:RDF
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:dbp="http://dbpedia.org/property/"
+	xmlns:dbo="http://dbpedia.org/ontology/" >
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Public_Enemies_(2009_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Rock&#39;n_Roll_(2017_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Big_Fish">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Blood_Ties_(2013_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Hunting_and_Gathering_(film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Joyeux_Noël">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Little_White_Lies_(2010_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Rivals_(2008_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Une_vie_meilleure">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Vidocq_(2001_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Un_ticket_pour_l&#39;espace">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Rust_and_Bone">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Narco_(film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/From_the_Land_of_the_Moon_(film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Girls_with_Balls">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/The_Last_Flight_(2009_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/The_Little_Prince_(2015_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/The_Program_(2015_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/The_Siege_of_Jadotville_(film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/The_Story_of_a_Boy_Who_Wanted_to_Be_Kissed_(film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Lady_Blue_Shanghai">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Angel_Face_(2018_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Annette_(film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/April_and_the_Extraordinary_World">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Lee_(upcoming_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Lisa_(2001_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Love_Is_in_the_Air_(2005_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Love_Me_If_You_Dare_(film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Macbeth_(2015_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Sink_or_Swim_(2018_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Brother_and_Sister_(2022_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Toi_et_moi_(film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Two_Days,_One_Night">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/War_in_the_Highlands">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/War_of_the_Buttons_(2011_Christophe_Barratier_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Whatever_You_Say_(film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/A_Good_Year">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/A_Private_Affair_(2002_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/A_Very_Long_Engagement">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Allied_(film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Cézanne_and_I">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Farewell_(2009_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Non-Fiction_(film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Hell_(2005_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Ismael&#39;s_Ghosts">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/It&#39;s_Only_the_End_of_the_World">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Jappeloup">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Taxi_(1998_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Taxi_2">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Taxi_3">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Tell_No_One">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/The_Beach_(film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/The_Black_Box_(2005_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/The_Dark_Knight_Rises">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/The_Day_the_Ponies_Come_Back">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/The_Immigrant_(2013_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/The_Key_(2007_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Arctic_Heart">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Assassin&#39;s_Creed_(film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Asterix_&amp;_Obelix:_The_Middle_Kingdom">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Chloé_(1996_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/La_Belle_Verte">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/La_Belle_Époque_(film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/La_Vengeance_au_Triple_Galop">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/La_Vie_en_rose_(film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Last_Night_(2010_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Dikkenek">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Dolittle_(film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/In_the_Name_of_My_Daughter">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Inception">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Innocence_(2004_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Midnight_in_Paris">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Next_Time_I&#39;ll_Aim_for_the_Heart">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Guillaume_Canet" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Mary_(2005_film)">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dbpedia.org/resource/Nine_(2009_live-action_film)__Nine__1">
+    <dbp:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+    <dbo:starring rdf:resource="http://dbpedia.org/resource/Marion_Cotillard" />
+  </rdf:Description>
+</rdf:RDF>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <!-- Definição do tipo Power -->
+    <xsd:complexType name="Power">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="id" type="xsd:ID" use="required"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <!-- Definição do tipo Powers -->
+    <xsd:complexType name="Powers">
+        <xsd:sequence>
+            <xsd:element name="power" type="Power" maxOccurs="unbounded"/>                
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <!-- Definição do tipo Aliases -->
+    <xsd:complexType name="Aliases">
+        <xsd:sequence>
+            <xsd:element name="alias" type="xsd:string" maxOccurs="unbounded"/>                
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <!-- Definição do tipo Identity -->
+    <xsd:complexType name="Identity">
+        <xsd:sequence>
+            <xsd:element name="firstname" type="xsd:string" maxOccurs="unbounded"/>  
+            <xsd:element name="lastname" type="xsd:string"/> 
+            <xsd:choice>
+                <xsd:element name="aliases" type="Aliases" minOccurs="0"/>
+                <xsd:element name="alias" type="xsd:string"/>
+            </xsd:choice>
+        </xsd:sequence>
+        <!-- Regra 5: Altura deve ter o formato n.nn -->
+        <xsd:attribute name="height" type="xsd:decimal" use="optional"/>
+        <!-- Regra 4: Gênero deve ser M, F ou NA -->
+        <xsd:attribute name="genre" use="optional">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="M"/>
+                    <xsd:enumeration value="F"/>
+                    <xsd:enumeration value="NA"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <!-- Definição do tipo Hero -->
+    <xsd:complexType name="Hero">
+        <xsd:sequence>
+            <xsd:element name="identity" type="Identity"/>  
+            <xsd:element name="species" type="xsd:string"/>
+            <!-- Regra 3: Abilities deve referenciar IDs de Power -->
+            <xsd:element name="abilities">
+                <xsd:simpleType>
+                    <xsd:list itemType="xsd:IDREF"/>
+                </xsd:simpleType>
+            </xsd:element>
+            <!-- Movies do tipo nomeado com padrão de c[nnnn] -->
+            <xsd:element name="movies">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:pattern value="[a-zA-Z_]+\\[\d{4}\\]"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </xsd:sequence>
+        <!-- Regra 2: birth-year deve ser uma ano -->
+        <xsd:attribute name="id" type="xsd:ID" use="required"/>
+        <xsd:attribute name="birth-year" type="xsd:gYear" use="required"/>
+    </xsd:complexType>
+
+    <!-- Definição do elemento raiz heros -->
+    <xsd:element name="heros">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="powers" type="Powers"/>
+                <xsd:element name="hero" type="Hero" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>

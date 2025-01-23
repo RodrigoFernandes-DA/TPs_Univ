@@ -1,0 +1,14 @@
+//nation[programme]/@nom
+//astronaute[@role="commandant"]
+//mission[not(@type="habité")]/@date
+//mission[@date="1965-01-19"][@type="habité" or not(@type)]
+//mission[@nom="Apollo 11"]/astronaute[@role="commandant"]
+//astronaute[./@role="commandant" and text()="Neil Armstrong"]/following-sibling::astronaute
+
+//mission[not(astronaut)]/@nom
+/descendant::nation[./@nom="USA"]/descendant::mission[position()=last()]
+//mission[./@nom="Vostok 2"]/preceding-sibling::mission
+//mission[count(astronaute)=1]
+//mission[number(substring(./@date,1,4))>=1970]/@nom
+*****distinct-values(//astronaute/text())
+*****//astronaute[@role='commandant' or @role='pilote']/text()

@@ -1,0 +1,247 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <title>1.3 Structuration</title>
+  </head>
+
+  <body>
+    <header>
+        <img src="logoWeb.png" alt="" width="500">
+        <article>
+            <h1>Programmation Web</h1>
+            <p>La programmation web est la programmation informatique qui permet d'éditer des Sites web. Elle peut prendre différentes formes : de la simple page statique à la page dynamique avec connexion à une base de données.</p>
+            <p>Pour un internaute qui fait appel à une URL, la page web correspondante, qu'elle soit statique ou dynamique, consiste en du code « côté client » (HTML, CSS, Javascript, ...) qui est interprété par son navigateur (Google Chrome, Firefox, ...) produisant une interface utilisateur. Ce code, qui est renvoyé par un serveur web, peut ou non avoir été généré par du calcul « côté serveur », via des langages de programmation particuliers, pouvant faire appel à des bases de données, des API...</p>
+            <p>Il existe différentes technologies et différents langages permettant de construire des sites web par l'intermédiaire de serveurs web, que l'on peut donc classer selon deux principes : des langages de programmation côté client, ou côté serveur. Cette distinction est faite pour séparer les langages « côté serveur » dont le code est exécuté sur le serveur web avant d'arriver sur le navigateur de l'utilisateur, des langages « côté client » dont l'exécution ne nécessite pas de calcul sur le serveur web mais, seulement après le téléchargement de la page, une interprétation par le navigateur de l'utilisateur.</p>
+        </article>
+
+        <article>
+            <h2>Table des matières</h2>
+            <ul>
+            <li><a href="#Langages_de_balisage">Langages de balisage</a> 
+                <ul>
+                    <li><a href="#Langage_HTML_ou_XHTML">Langage HTML ou XHTML</a></li>
+                    <li><a href="#Limites_du_HTML">Limites du HTML</a></li>
+                </ul>
+            </li>
+
+            <li><a href="#Programmation_client">Programmation client</a>
+                <ul>
+                    <li><a href="#Principe1">Principe</a></li>
+                    <li><a href="#Utilisation">Utilisation</a></li>
+                    <li><a href="#Langages_de_Script">Langages de Script</a></li>
+                    <li><a href="#Avantages_et_inconvénients">Avantages et inconvénients</a></li>
+                </ul>
+            </li>
+
+            <li><a href="#Programmation_serveur">Programmation serveur</a>
+                <ul>
+                    <li><a href="#Principe2">Principe</a></li>
+                    <li><a href="#Différents_langages_et_technologies">Différents langages et technologies</a>
+                        <ul>
+                            <li><a href="#JavaScript">JavaScript</a></li>
+                            <li><a href="#PHP">PHP</a></li>
+                            <li><a href="#Python">Python</a></li>
+                            <li><a href="#Ruby">Ruby</a></li>
+                            <li><a href="#Java">Java</a></li>
+                            <li><a href="#Technologies_Microsoft">Technologies Microsoft</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+
+            <li><a href="#Technologie_Ajax">Technologie Ajax</a></li>
+            </ul>
+        </article>
+    </header>
+
+    <article id="Langages_de_balisage">
+        <h2>Bases de la page web: Les langages de balisage</h2>
+        <section id="Langage_HTML_ou_XHTML">
+            <h3>Langage HTML ou XHTML</h3>
+            <p>Toute page web comprend une base de langage HTML ou XHTML. Il s'agit d'un langage de balisage qui définit essentiellement la structure de la page web (titres, tableaux, paragraphes, etc.).</p>
+            <p>C'est un langage qui permet de créer des hyperliens, à savoir des liens d'un document à un autre ou d'un endroit d'un document à un autre endroit du même document (identificateur de fragment).</p>
+            <p>Au départ ce langage ne définissait que la structure de la page mais très vite se sont rajoutées des balises (ou tags) qui s'occupaient de spécifier les caractéristiques de la page web (hiérarchisation du contenu, attributs donnés aux balises...).</p>
+            <p>Depuis sa version 4, le langage HTML s'accompagne des CSS qui sont des styles se chargeant de la mise en forme et de l'animation de la page.</p>
+            <p>Le XHTML est une évolution du HTML basée sur XML.</p>
+        </section>
+
+        <section id="Limites_du_HTML">
+            <h3>Limites du HTML</h3>
+            <p>Une page web créée en HTML est totalement statique et n'offre qu'une faible possibilité d'interaction avec le visiteur. Chaque page doit être créée au préalable et doit être manuellement mise à jour.</p>
+            <p>Concernant l'aspect dynamique, seules existent deux balises HTML (&lt;marquee&gt; et &lt;blink&gt;), mais sont propriétaires à Microsoft, ne sont aujourd'hui plus supportées par certains navigateurs et ne sont pas reconnues par le <a href="https://www.w3.org/">W3C</a>.</p>
+            <p>Quelques fonctionnalités des CSS permettaient de créer un peu de dynamisme dans la page (ex. changement de couleur lors d'un survol). Le CSS 3.0 est en train de changer la donne.</p>
+            <p>À propos de l'interactivité, le langage HTML permet uniquement de créer le fond d'un formulaire d'interaction avec le visiteur. Il permet de définir les paramètres d'une action, et de renvoyer les données du formulaire vers un 'système' qui gèrera celles-ci, mais ne permet pas de définir l'action elle-même.</p>
+        </section>
+
+        <section id="Portabilité">
+            <h3>Portabilité</h3>
+            <p>Le langage HTML est multiplateforme. Tous les navigateurs web reconnaissent le langage HTML de base, seuls certaines balises sont propres à certains navigateurs (comme la balise &lt;marquee&gt; qui n'est interprétée comme défilement de texte que dans Internet Explorer et Google Chrome. Les CSS, même s'ils sont standardisés par le W3C, ne sont pas toujours reconnus de la même manière par les différents navigateurs web.</p>
+        </section>
+
+        <section id="Mise_en_place">
+            <h3>Mise en place</h3>
+            <p>Le langage HTML a l'avantage d'être facile à mettre en place, et ne demande pas de compétences techniques très poussées. Ses pages sont d'un traitement très léger et rapide par le serveur.</p>
+            <p>Il faut donc autre chose pour ajouter de l'animation ou de l'interactivité dans la page web.</p>
+        </section>
+
+    </article>
+
+    <article id="Programmation_web_côté_client">
+        <h2>Programmation web côté client</h2>
+        <p>Les objets ne fournissent pas toutes les solutions aux besoins d'interactivité et de dynamisme des sites ou sont parfois lourds à mettre en place. Il est possible alors de passer à de la programmation permettant une meilleure interaction avec la page HTML.</p>
+        <section id="Principe1">
+            <h3>Principe</h3>
+            <p>Lorsque le visiteur demande une simple page HTML (avec ou sans objets) en tapant une adresse ou URL, le serveur web lui renvoie simplement le contenu de la page demandée, c'est le navigateur web qui interprète le contenu HTML et les plug-ins qui interprètent les objets, en demandant à leur tour le contenu des objets au serveur web.</p>
+            <p>Si du code, côté client, est inséré dans la page, le serveur web renverra également la page au client, y compris le code. C'est donc à nouveau le navigateur web qui doit interpréter le code et faire ce que le code demande.</p>
+        </section>
+
+        <section id="Utilisation">
+            <h3>Utilisation</h3>
+            <p>La programmation côté client sera utilisée essentiellement dans le cas de validation de formulaires (champs obligatoires, petits calculs...) et dans la création de petites animations (menus déroulants...).</p>
+        </section>
+
+        <section id="Langages_de_Script">
+            <h3>Langages de Script</h3>
+            <p>La programmation côté client utilise des langages de scripts. À la différence d'autres langages de programmation, ces langages ne sont pas compilés. Ils sont interprétés par le navigateur web du visiteur, et leur syntaxe est moins stricte que celle des langages de développeurs (variables non-typées a priori, le point-virgule à la fin des instructions est optionnel...).</p>
+            <ul>
+                <li>JavaScript est le plus utilisé des langages de programmation web côté client. Il est reconnu par tous les navigateurs (dans les versions actuelles). Il se base sur le langage normalisé ECMAScript.</li>
+                <li>JScript, fort proche du JavaScript est simplement une adaptation de celui-ci par Microsoft.</li>
+                <li>VBScript est le langage de script développé par Microsoft sur base du Visual Basic. Ce langage n'est interprété que par les navigateurs basés sur ceux développés par Microsoft (soit Internet Explorer et Maxthon). Il est donc peu utilisé sur l'Internet (mais utilisé parfois sur des intranets).</li>
+                <li>DHTML n'est PAS un langage de script mais simplement la combinaison, dans une page web, de JavaScript, de HTML 4 ou de XHTML et de CSS.</li>
+            </ul>
+        </section>
+
+        <section id="Avantages_et_inconvénients">
+            <h3>Avantages et inconvénients</h3>
+            <h4>Avantages:</h4>
+            <p>La programmation côté client est légère et relativement simple à implémenter (syntaxe pas trop complexe).</p>
+            <h4>Inconvénients:</h4>
+            <p>Le code est envoyé tel quel au client, et donc visible par celui-ci (s'il regarde les sources de sa page) et donc peu sécurisé. Le bon déroulement du programme dépend entièrement du navigateur du client, de sa configuration et de son niveau de sécurité.</p>
+            <p>Il n'est donc pas question ici de lier le site web à une base de données.</p>
+        </section>
+
+    </article>
+
+    <article id="Programmation_web_côté_serveur">
+        <h2>Programmation web côté serveur</h2>
+        <section id="Principe2">
+            <h3>Principe</h3>
+            <p>Lorsqu’un visiteur demande (ou requête) le chargement d'une URL sur son navigateur, un appel (le plus souvent via HTTP ou HTTPS) est effectué sur le serveur web qui héberge le site correspondant. Le serveur web va ensuite identifier le ou les scripts (écrits dans un langage « côté serveur ») correspondant à cette URL, et demander leur exécution. L'exécution va alors résulter en un contenu HTML, qui va ensuite être expédié en réponse au visiteur, lisible par son navigateur.</p>
+            <p>La programmation "côté serveur" consiste donc à produire du code dont l'exécution, du calcul et de la récupération de données externes (bases de données, API, ...), va résulter en un contenu qui sera envoyé au client. Ce contenu peut être du code "côté client".</p>
+        </section>
+
+        <section id="Différents_langages_et_technologies">
+            <h3>Différents langages et technologies</h3>
+
+            <section id="JavaScript">
+                <img src="logoJS.png " alt="" width="150">
+                <h4>JavaScript</h4>
+                <p>Il est possible de mettre en place un serveur web en utilisant le programme Node.js, exposant des URL, via notamment Express.js, à un projet de code développé en Javascript.</p>
+            </section>
+
+            <section id="PHP">
+            <h4>PHP</h4>
+            <p>PHP est un langage de script interprété côté serveur. Le code PHP est lu par le serveur et interprété pour produire une page HTML (ou d'autres types de fichier comme des images ou des documents PDF) à chaque fois que la page sera demandée. Ce langage a été créé initialement dans le cadre des logiciels Open Source. De nombreux développeurs ont ensuite profité de l'Open Source pour développer de nombreux modules prêts à l'usage et paramétrables à volonté.</p>
+            <p>Les modules serveurs de PHP sont implémentés sur les serveurs Apache et Unix mais PHP peut être implémenté sur d'autres plates-formes via des CGI.</p>
+            <p>La syntaxe, relativement simple, part d'une base de C.</p>
+            <p>Frameworks notables : Symfony, Laravel</p>
+            </section>
+
+            <section id="Python">
+            <h4>Python</h4>
+            <p>Django : Framework open-source largement répandu pour construire et déployer une application côté serveur en Python.</p>
+            </section>
+
+            <section id="Ruby">
+            <h4>Ruby</h4>
+            <p>Ruby on Rails : Framework open-source largement répandu pour construire et déployer une application côté serveur en Ruby.</p>
+            </section>
+
+            <section id="Java">
+            <h4>Java</h4>
+            <ul>
+                <li><strong>JSP</strong> : Technologie développée par Sun Microsystems dans le but de créer des pages dynamiques avec le langage Java. Les JSP permettent d'ajouter du code Java dans la page HTML qui sera interprété par le serveur. On peut distinguer trois ensembles d'instructions JSP : 
+                    <ul>
+                        <li>Les instructions de programmation permettent d’insérer des bouts de code Java directement dans la page web, et donnent accès à une grande partie de la bibliothèque de programmation de la version standard de Java (composants JavaBeans, accès aux bases de données via JDBC etc.)</li>
+                        <li>Les directives qui permettent de spécifier certaines propriétés de la page, l’inclusion du contenu d’autres fichiers et l’utilisation d’autres classes et bibliothèques de balises personnalisées.</li>
+                        <li>Les actions permettent essentiellement d’utiliser des composants JavaBeans existants.</li>
+                        <li><strong>Portabilité</strong> : Très grande portabilité grâce à Java : serveurs Apache mais aussi IIS, etc.</li>
+                        <li><strong>Mise en place</strong> : Utilisation de Java comme langage de programmation.</li>
+                        <li><strong>Performance</strong> : Très variable en fonction de l'implémentation utilisée.</li>
+                        <li><strong>Utilisation</strong> : Tout type de fonctionnalités.</li>
+                    </ul>
+
+                <li><strong>Servlets</strong> : Le nom vient d'une analogie possible à faire avec les applets. Il s'agit donc de programmes créés en Java et tournant sur le serveur web. L'exécution du programme génère les pages web renvoyées au client  
+                    <ul>
+                        <li><strong>Langages utilisés</strong> : Java</li>
+                        <li><strong>Portabilité</strong> : Très grande portabilité grâce à Java : serveurs Apache mais aussi IIS, etc.</li>
+                        <li><strong>Mise en place</strong> : Utilisation de Java comme langage de programmation.</li>
+                        <li><strong>Performance</strong> : Très variable en fonction de l'implémentation utilisée.</li>
+                        <li><strong>Utilisation</strong> : Tout type de fonctionnalités.</li>
+                    </ul>
+            </ul>
+            </section>
+
+            <section id="Technologies_Microsoft">
+            <h4>Technologies Microsoft</h4>
+            <ul>
+                <li><strong>ASP</strong> : Technologie développée par Microsoft à partir de 1996 dans le but de créer des pages dynamiques. ASP permet d'ajouter du code dans la page HTML qui sera interprété par le serveur. La partie ADO (ActiveX Data Object) de ASP permet de se connecter à une base de données. 
+                    <ul>
+                        <li><strong>Langages utilisés</strong> : VBScript (langage par défaut) ou JScript.</li>
+                        <li><strong>Portabilité</strong> : La technologie est implémentée sur les serveurs web de Microsoft (IIS et PWS).</li>
+                        <li><strong>Mise en place</strong> : Utilisation de langage de Script donc d'accès relativement aisé (mais se complexifie vite).</li>
+                        <li><strong>Performance</strong> : Bonne performance surtout si l'on utilise du code compilé (dll).</li>
+                        <li><strong>Utilisation</strong> : Tout site web dynamique peut être créé en ASP.</li>
+                        <li><strong>Dernière version</strong> : ASP 3.0</li>
+                    </ul>
+
+                <li><strong>ASP.NET</strong> : Technologie développée par Microsoft sur base du Framework.Net. L'évolution est importante par rapport à ASP et les possibilités deviennent quasi infinies. ASP.NET a le gros avantage, par rapport à d'autres technologies, de bien séparer le contenu de la page web, sa mise en forme et la programmation des aspects dynamiques (travail en Code Behind). 
+                    <ul>
+                        <li><strong>Langages utilisés</strong> : C#, VB.Net, JavaScript.Net... et de nombreux autres langages partageant le Common Runtime Language du Framework.Net.</li>
+                        <li><strong>Portabilité</strong> : a technologie est implémentée sur les serveurs web de Microsoft (IIS 2003).</li>
+                        <li><strong>Mise en place</strong> : Utilisation de langage de programmation et nécessite donc de bonnes bases en programmation mais le langage importe peu (plusieurs langages possibles). Avec la version 2 (ASP.NET 2.0) et un outil de développement comme Visual Studio, le développement d'applications peut déjà aller très loin sans programmation : beaucoup de contrôles sont gérés par leurs propriétés.</li>
+                        <li><strong>Performance</strong> : Excellentes performances car tout le code est compilé (soit précompilé, soit compilé à la volée).</li>
+                        <li><strong>Utilisation</strong> : Tout type d'application web peut être créé avec ASP.NET.</li>
+                    </ul>
+            </ul>
+            </section>
+        </section>
+    </article>
+
+    <article id="Technologie_Ajax">
+        <h2>Technologie Ajax</h2>
+        <p>Ajax est une technologie, avec ses avantages et inconvénients, qui combine plusieurs éléments : </p>
+        <ul>
+            <li>Du XHTML pour la structure de la page,</li>
+            <li>Les CSS pour la mise en forme de la page,</li>
+            <li>Du JavaScript et le DOM pour la partie dynamique,</li>
+            <li>XML, XSLT et XMLHttpRequest pour la manipulation des données (ou d'autres formats de fichiers de données).</li>
+        </ul>
+        <p>Cette technologie permet d'effectuer une requête HTTP asynchrone (en parallèle) depuis un client au serveur web (effectuer une action, mettre à jour une information...). Le serveur renvoie la ressource demandée, celle-ci pouvant contenir des informations ou du code pour mettre à jour la page HTML.</p>
+        <img src="ajax.png" alt="" width="650">
+    </article>
+
+    <footer>
+        <article id="Articles_Wikipedia">
+            <h2>Articles Wikipedia</h2>
+            <ul>
+                <li><a href="https://fr.wikipedia.org/wiki/Programmation_web">Programmation Web</a></li>
+                <li><a href="https://fr.wikipedia.org/wiki/Site_web">Site web</a></li>
+                <li><a href="https://fr.wikipedia.org/wiki/Conception_de_site_web">Conception de site Web</a></li>
+                <li><a href="https://fr.wikipedia.org/wiki/Hypertext_Markup_Language">HTML</a></li>
+                <li><a href="https://fr.wikipedia.org/wiki/Feuilles_de_style_en_cascade">CSS</a></li>
+            </ul>
+
+            <p><a href="mailto:simon.bernard@univ-rouen.fr">Simon BERNARD.</a></p>
+            <p>Pour le <a href="http://mastersid.univ-rouen.fr/">Master SID</a> de l'<a href="http://www.univ-rouen.fr/">Université de Rouen Normandie</a></p>
+            <p>UFR Sciences et Techniques</p>
+            <p>Avenue de l'Université</p>
+            <p>76800 Saint-Étienne-du-Rouvray</p>
+
+        </article>
+
+    </footer>
+  </body>
+</html>

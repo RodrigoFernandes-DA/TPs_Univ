@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Démonstration CSS</title>
+    <style>
+        * {
+            border: 2px solid grey;
+        }
+        .yellow {
+            background-color: #eeee00;
+        }
+        .green {
+            background-color: #00bb00;
+        }
+        .blue {
+            background-color: #5555ff;
+        }
+        .relative {
+            position: relative;
+            top: 10px;
+            right: 5px;
+        }
+        .float {
+            float: left;
+            width: 100px;
+            margin: 5px;
+        }
+        .absolute {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        article {
+            float: left;
+            width: 59%;
+        }
+        aside {
+            float: right;
+            width: 39%;
+        }
+        footer {
+            clear: both;
+        }
+    </style>
+</head>
+<div>
+    <p class="yellow">Une boîte jaune</p>
+    <p class="green">Une boîte verte</p>
+    <p>
+        <span class="yellow">Un élément jaune</span>
+        <span class="green">Un élément vert</span>
+    </p>
+    <br>
+    <hr>
+    <p>
+        Exemple d'un texte contenant <span class="yellow relative">un élément déplacé</span> par rapport au flux normal, et provoquant un chevauchement
+    </p>
+    <br>
+    <hr>
+    <p>
+        <div class="green float">Un bloc flottant en haut et à droite</div>
+        <div class="yellow">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+    </p>
+    <br>
+    <hr>
+    <div>
+        <article class="yellow">
+            <strong>article: </strong>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+        </article>
+        <aside class="green">
+            <strong>aside: </strong>
+            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </aside>
+        <footer class="blue">
+            <strong>footer: </strong>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </footer>
+    </div>
+    <br>
+    <hr>
+    <div class="green relative">
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+        <div class="yellow absolute">
+            Élément bloc en position absolue
+        </div>
+    </div>
+</body>
+</html>

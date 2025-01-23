@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="msid2223.css" rel="stylesheet">
+</head>
+<body class="ex1">
+  <nav>
+    <ul>
+      <li><a href="msid2223-enonce.html">msid2223-enonce</a></li>
+      <li><a href="msid2223-images.html">msid2223-images</a></li>
+      <li><a href="msid2223-lorem.html">msid2223-lorem</a></li>
+    </ul>
+  </nav>
+  <main class="consignes">
+    <header>
+      <img src="./img/logo_urn_blanc.png">
+      <h1>Conception d'Interface Web</h1>
+      <h2>Epreuve pratique 2022-2023</h2>
+      <p>Cet examen comprend quatres exercices. Pour y répondre, vous devez compléter les quatres fichiers qui vous sont fournis: <code>msid2223-enonce.html</code>, <code>msid2223-lorem.html</code>, <code>msid2223-images.html</code> et <code>msid2223.css</code>. Ces exercices sont indépendants et peuvent être traités dans n'importe quel ordre.</p>
+    </header>
+
+    <section>
+      
+      <h2>Exercice 1</h2>
+      <p>Ce premier exercice vise à mettre en forme cette page HTML (et uniquement cette page), en ajoutant des règles de styles CSS dans le fichier <code>msid2223.css</code>. Vous serez évalués notamment sur la pertinence de vos selecteurs et l'ordre dans lequel vous disposez vos règles dans la feuille de style CSS:</p>
+      <ol>
+        <li>Définissez quatres variables CSS: <code>color1</code>, <code>color2</code>, <code>color3</code> et <code>color4</code>, respectivement égales à <code>#FAFAFA</code>, <code>#354F52</code>, <code>#84A98C</code> et <code>#354f52</code>.</li>
+        <li>En utilisant ces variables, affectez <code>color1</code> à la couleur de fond de cette page, <code>color2</code> à la couleur de police, et <code>color3</code> à la couleur de police des éléments <code>code</code></li>
+        <li>De la même manière, affectez <code>color4</code> à la couleur des sous-titres (éléments <code>h2</code>) des exercices (et uniquement ceux des exercices).</li>
+        <li>De la même manière, affectez <code>color1</code> à la couleur de la police de l'en-tête (élément <code>header</code>) et <code>color2</code> à sa couleur de fond.</li>
+        <li>Ajoutez des bordures continues de 2 pixels d'épaisseur et de couleur <code>color2</code> autour de chaque exercice.</li>
+        <li>Définissez la largeur du contenu principal (élément <code>main</code>) à 80% de la largeur de la page et faites en sorte que ce contenu soit centré horizontalement.</li>
+        <li>Ajoutez des espacements internes tout autour du contenu des sections et de l'en-tête (élément <code>header</code>), tous égaux à la taille de la police de caractères de l'élément racine.</li>
+        <li>Redimensionnez l'image <code>logo_urn_blanc.png</code> pour qu'elle occupe 20% de la largeur de son conteneur et qu'elle soit flottante à droite.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Exercice 2</h2>
+      <p>Pour ce deuxième exercice, vous devez mettre en forme la page <code>msid223-lorem.html</code> (et uniquement cette page), en complétant la feuille de style <code>msid2223.css</code> et en modifiant le code source HTML de <code>msid223-lorem.html</code> quand cela est nécessaire. Pour cela, vous allez vous appuyer sur le mécanisme de grille flexible du <em>framework</em> CSS <code>Bootstrap</code>.</p>
+      <p>La page <code>msid223-lorem.html</code> est composée de cinq articles. Mettez en place l'agencement en grille flexible, en respectant les consignes suivantes:</p>
+      <ol>
+        <li>Commencez par ajouter une bordure continue autour de chaque article de la page <code>msid223-lorem.html</code> (et uniquement cette page).</li>
+        <li>Ajoutez un espacement externe au dessus de chaque article égal à la taille de la police de caractère, et des espacements internes de 10 pixels tout autour de leurs contenus.</li>
+        <li>Faites en sortes que le contenu principal de la page (élément <code>main</code>) occupe toute la largeur du <em>viewport</em> si celle-ci est inférieur à 768 pixels. Pour des largeurs supérieures du <em>viewport</em>, la largeur du contenu est ajustée automatiquement et celui-ci est centré dans la page.</li>
+        <li>Positionnez les articles dans la page de sorte qu'ils soient répartis sur trois lignes: le premier article sur une première ligne, le deuxième et le troisième sur une deuxième ligne, et le quatrième et le cinquième sur une troisième ligne. Les articles qui partagent une même ligne doivent être côte à côte et être de même largeur.</li>
+        <li>Faites en sortes que tous les articles se ré-agencent automatiquement les uns en dessous des autres dés que la largeur du <em>viewport</em> est inférieure à 992 pixels. Dans cette configuration, tous les articles sont les uns en dessous des autres, sur leur propre ligne.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Exercice 3</h2>
+      <p>Ce troisième exercice a pour but de concevoir une barre de navigation en CSS (vous ne devez pas utiliser le <em>framework</em> <code>Bootstrap</code>). Cette barre de navigation doit apparaître à l'identique sur les trois pages <code>msid2223-enonce.html</code>, <code>msid2223-lorem.html</code>, et <code>msid2223-images.html</code>. Elle doit contenir trois <em>items</em> (liens), chacun d'eux permettant de naviguer vers une des trois pages HTML. Cette barre de navigation doit respecter les contraintes suivantes:</p>
+      <ol>
+        <li>Elle doit occuper toute la largeur du <em>viewport</em>, à tous moments.</li>
+        <li>Les trois <em>items</em> de navigation doivent être côte à côte, et centrés dans la barre.</li>
+        <li>La couleur des <em>items</em> doit être <code>color1</code> et la couleur de fond doit être <code>color2</code>.</li>
+        <li>Le <em>items</em> ne doivent pas être soulignés.</li>
+        <li>Au survol d'un <em>item</em> avec la souris, les couleurs de texte et de fond doivent s'inverser (<code>color2</code> pour le texte et <code>color1</code> pour le fond).</li>
+        <li>Le contenu de chaque page doit être positionné à 20 pixels du bas de la barre de navigation.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Exercice 4</h2>
+      <p>Ce quatrième exercice vise à positionner les images de la page <code>msid2223-images.html</code> à l'aide du module CSS <code>flexbox</code>, en respectant les contraintes suivantes:</p>
+      <ol>
+        <li>Les images doivent toutes êtres inclues dans un conteneur de type <code>flexbox</code>.</li>
+        <li>Elles doivent se ré-agencer automatiquement sur plusieurs lignes en fonction de la largeur de l'écran (<em>wrapping</em>).</li>
+        <li>Elles doivent être centrées dans leurs lignes respectives et alignées sur leurs bordures supérieurs (alignement vertical en haut).</li>
+        <li>Elles ne doivent être ni rétrécies, ni agrandies.</li>
+        <li>Elles ne doivent pas êtres collées les unes aux autres (il doit y avoir un espacements entres toutes les images).</li>
+      </ol>
+    </section>
+    </section>
+  </main>
+</body>
+</html>

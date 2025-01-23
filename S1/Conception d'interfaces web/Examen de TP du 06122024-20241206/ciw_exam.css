@@ -1,0 +1,180 @@
+:root {
+    --color-primary-bg: #eeeeee;
+    --color-primary-text: #222831;
+    --color-secondary-bg: #2d4059;
+    --color-secondary-text: #eeeeee;
+    --color-warning: #e25050;
+}
+
+html,
+body,
+ul,
+nav,
+section,
+article,
+a {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+code {
+    font-family: courier, serif;
+    color: inherit;
+}
+
+/* Exercice 1 */
+
+body {
+    margin: auto;
+    width: 90%;
+    margin-top: 6%;
+}
+
+article {
+    border-radius: 15px;
+    background-color: var(--color-primary-bg);
+    padding: 10px;
+    margin: 20px;
+    box-shadow: 5px 5px 5px 10px gray; 
+}
+
+#logo {
+    height: 3em;
+    float: right;
+}
+
+h1, h2, h3 {
+    font-weight:bold;
+    color: var(--color-primary-text);
+}
+
+h1 {
+    font-size: 2em;
+}
+
+h2 {
+    font-size: 1.5em;
+}
+
+h3 {
+    font-size: 1.25em;
+}
+
+h4 {
+    font-weight: normal;
+    font-size: 1em;
+    text-decoration-line: underline;
+}
+
+ul {
+    list-style-position: outside;
+    padding-left: 20px;
+}
+
+.intro {
+    background-color: var(--color-secondary-bg);
+    color: var(--color-secondary-text);
+    padding: 20px;
+    margin-top: 10px;
+}
+
+.intro h2 {
+    color: var(--color-secondary-text);
+}
+
+.warning {
+    background-color: var(--color-warning);
+    color: var(--color-primary-text);
+    font-weight:bold;
+    padding: 10px;
+    margin-top: 10px;
+    border: 4px dashed var(--color-secondary-bg);
+}
+
+
+/* Exercice 2 */
+
+nav {
+    position: fixed;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    background-color: var(--color-secondary-bg);
+    justify-content: flex-end;
+    align-content: center;
+    padding: 0;
+    display: inline-block;
+  }
+
+nav img {
+    height: 3em;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+nav li {
+    display: inline-block;
+    font-size: 1em;
+}
+
+nav ul {
+    text-align: center;
+    float: right;
+    margin-top: 10px;
+    padding-top: 10px;
+    display: flex;
+    align-content: center;
+}
+
+nav a {
+    color : var(--color-secondary-text); 
+    text-decoration: none;
+    padding: 10px;
+    margin: 0px 10px 0px 10px;
+}
+
+nav a:hover {
+    background-color: var(--color-primary-bg);
+    color : var(--color-primary-text);
+}
+
+
+/* Exercice 3 */
+
+.ex3 {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.ex3 img {
+    max-width: 100%;
+}
+
+.ex3 section a {
+    float: right;
+}
+
+@media screen and (min-width: 800px) {
+    .ex3 section {
+        width: 31%;
+        border : 2px solid var(--color-secondary-bg);
+        border-radius: 10px;
+        padding: 5px;
+        height:fit-content;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .ex3 section {
+        width: 100%;
+        border : 2px solid var(--color-secondary-bg);
+        border-radius: 10px;
+        padding: 5px;
+        margin-top: 20px;
+        height:fit-content;
+    }
+}
+

@@ -1,0 +1,200 @@
+html,
+body,
+ul,
+nav,
+section,
+article {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
+code {
+  font-family: courier, serif;
+  font-size: 1.2em;
+}
+
+/*Ajoutez vos règles de style ci-dessous*/
+
+
+:root {
+  --color1: #FAFAFA;
+  --color2: #354F52; 
+  --color3: #84A98C; 
+  --color4: #354f52; 
+  }
+
+.ex1 body {
+  background-color: var(--color1);
+}
+
+.ex1 p, .ex1 a, .ex1 li {
+  color: var(--color2);
+}
+
+.ex1 code {
+  color: var(--color3);
+}
+
+.ex1 section h2 {
+  color: var(--color4);
+}
+
+.ex1 header, .ex1 header p, .ex1 header h2 {
+   color: var(--color1);
+  background-color: var(--color2);
+}
+
+.ex1 header {
+  padding: 1em;
+}
+
+.ex1 section {
+  border : 2px solid var(--color2); 
+  padding: 1em;
+}
+
+.ex1 main {
+  width: 80%;
+  margin: auto;
+  text-align: justify;
+}
+
+.ex1 header img  {
+  max-width: 20%;
+  float: right;
+}
+
+
+
+.ex2 article {
+  /* border : 2px solid var(--color2); 
+  border-radius: 10px;
+  margin: 1em; */
+  padding: 10px;
+}
+
+
+
+.images {
+    background-color: silver;
+    border-radius: 15px;
+    /* border-color: #222831; */
+    border: 1px solid var(--color1);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-content: space-evenly;
+    flex-wrap: wrap;
+    
+}
+
+
+
+/* 
+:root {
+  --color1: #FAFAFA;
+  --color2: #354F52; 
+  --color3: #84A98C; 
+  --color4: #354f52; 
+}
+
+.consignes {
+  background-color: var(--color1);
+  color: var(--color2); 
+}
+
+.consignes code {
+  color: var(--color3)
+}
+
+.consignes section h2 {
+  color: var(--color4);
+}
+
+.consignes header {
+  color: var(--color1); 
+  background-color: var(--color2);
+}
+
+.consignes section {
+  border : 2px solid var(--color2); 
+}
+
+.consignes {
+  width : 80%;
+  margin-left: auto;
+  margin-right: auto; 
+}
+
+.consignes header, .consignes section {
+  padding: 1rem;
+}
+
+.consignes header img {
+  width : 20%; 
+  float: right; 
+} */
+
+/* EXERCICE 2*/
+/* 
+article {
+  border: 2px solid var(--color2); 
+  margin-top: 1em;
+  padding: 10px;
+}
+
+body > main {
+  margin: auto;
+  width: auto; 
+}
+
+nav {
+  position: fixed;
+  top: 0; 
+  left: 0;
+  width: 100%; 
+  background-color: var(--color2);
+}
+
+nav li {
+  display: inline-block;
+}
+
+nav ul {
+  text-align: center;
+}
+
+nav a {
+  color : var(--color1); 
+  text-decoration: none;
+}
+
+nav a:hover {
+  color: var(--color2);
+  background-color: var(--color1);
+}
+
+body {
+  padding-top: 44px;
+}
+
+.images {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px; 
+}
+
+.images img {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  body > main {
+    width: 100%; 
+  }  
+} */

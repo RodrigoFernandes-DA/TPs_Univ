@@ -1,0 +1,207 @@
+:root {
+    --color1: #222831;
+    --color2: #2d4059;
+    --color3: #ff5722;
+    --color4: #eeeeee;
+}
+
+html,
+body,
+ul,
+nav,
+section,
+article,
+a {
+    font-family: sans-serif;
+}
+
+code {
+    font-family: courier, serif;
+    color: inherit;
+}
+
+/* exercice 1 : Placez ici votre code CSS pour l'exercice 1 */
+
+.navbar-brand img {
+    width: 10%;
+}
+
+a .nav-link {
+    color: var(--color4);
+    font-weight: bold;
+}
+
+.nav-item:hover {
+    border: 2px solid var(--color3);
+    background-color: var(--color2);
+}
+
+.nav-link:visited {
+    color: var(--color3);
+}
+
+.exo1 {
+    margin-top: 5%;
+}
+
+.navbar-nav {
+    width: 100%;
+    justify-content: flex-end;
+}
+
+/* Exercice 2 : Placez ici votre code CSS pour l'exercice 2 */
+
+.exo2 figure {
+    width: 80%;
+    margin: auto;
+}
+
+.exo2 img {
+    max-width: 90%;
+}
+
+.exo2 header img {
+    float: right;
+    width: 10em;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* .exo2 {
+    background-color: var(--color4);
+    width: 90%;
+    margin: auto;
+    border: 2px solid var(--color1);
+    padding: 1em;
+}
+
+.exo2 header img {
+    width: 10%;
+    float: right;
+}
+
+.exo2 figure img {
+    max-width: 100%;
+    border: 2px solid var(--color1); 
+    margin: 1em;
+}
+
+.exo2 figure {
+    width: 80%;
+    margin:auto; 
+}
+
+.exo2 h1 {
+    color: var(--color3);
+}
+
+.exo2 header section {
+    background-color: var(--color1);
+    color: var(--color4);
+    padding: 1em;
+}
+
+.exo2 header section li {
+    list-style: circle;
+}
+
+.exo2 figcaption {
+    text-align: center;
+} */
+
+/* Exercice 3 : Placez ici votre code CSS pour l'exercice 3 */
+
+.images {
+    background-color: silver;
+    border-radius: 15px;
+    /* border-color: #222831; */
+    border: 1px solid var(--color1);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: space-evenly;
+    flex-wrap: wrap;
+    
+}
+
+.images img {
+    max-height: 20em;
+    max-width: 95%;
+    margin: 5px;
+    border-radius: 15px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* .images {
+    width: 90%;
+    margin: auto;
+    background-color: var(--color4);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    border: 1px solid var(--color1);
+}
+
+.images img {
+    height: 20em; 
+} */

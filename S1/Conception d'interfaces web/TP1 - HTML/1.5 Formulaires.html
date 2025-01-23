@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire d'enregistrement</title>
+</head>
+
+<body>
+    <form>
+        <fieldset>
+            <legend>Formulaire d'enregistrement</legend>
+            <table>
+                <!-- <col width="200">
+                <col width="400"> -->
+                <tr>
+                    <td>
+                        <label><strong>Civilité:</strong></label>
+                    </td>
+                    <td>
+                        <input type="radio" id="Mademoiselle" name="civilite" value="Monsieur"><label>Mademoiselle</label>
+                        <input type="radio" id="Madame" name="civilite" value="Monsieur"><label>Madame</label>
+                        <input type="radio" id="Monsieur" name="civilite" value="Monsieur"><label>Monsieur</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="nom"><strong>Nom/Prénom:</strong></label>
+                    </td>
+                    <td>
+                        <input size="50" type="text" id="nom" name="nom" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="adresse"><strong>Adresse:</strong></label>
+                    </td>
+                    <td>
+                        <textarea id="adresse" name="adresse" style="width: 300px;" placeholder="Rue, numéro, boite postale"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="postal"><strong>No postal/Localité:</strong></label>
+                    </td>
+                    <td>
+                        <input size="10" type="text" id="postal" name="postal" placeholder="XXXXX" required>
+                        <input size="20" type="text" id="localite" name="localite" placeholder="Ville" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="pays"><strong>Pays:</strong></label>
+                    </td>
+                    <td>
+                        <select id="pays" name="pays" style="width: 110px;">
+                            <option value="FR">France</option>
+                            <option value="BE">Brésil</option>
+                            <option value="CH">Suisse</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label><strong>Plateforme:</strong></label>
+                    </td>
+                    <td>
+                        <input type="checkbox" id="Linux" name="plateforme" value="Linux"><label>Linux</label>
+                        <input type="checkbox" id="MacOS" name="plateforme" value="MacOS"><label>MacOS</label>
+                        <input type="checkbox" id="Windows" name="plateforme" value="Windows"><label>Windows</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label><strong>Applications:</strong></label>
+                    </td>
+                    <td>
+                        <select name="Applications" id="Applications" multiple="multiple" >
+                            <option value="Bureautique" selected="selected">Bureautique</option>
+                            <option value="SGBD">SGBD</option>
+                            <option value="Web">Web</option>
+                            <option value="DAO">DAO</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    </form>
+
+    <div style="display: flex;justify-content: center;">
+        <button type="submit">Valider</button>
+        <button type="reset">Effacer</button>
+    </div>
+
+</body>
+</html>

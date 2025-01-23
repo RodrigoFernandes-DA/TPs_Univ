@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml-knowledge-panel dc:title="Extensible Markup Language" xmlns="https://www.w3.org/XML/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+	<dc:type>Langage de programmation</dc:type>
+	<dc:description>
+		L'Extensible&gt; Markup Language, généralement appelé XML, « langage de balisage extensible » en français, est un métalangage informatique de balisage générique qui est un sous-ensemble du Standard Generalized Markup Language. 
+	<dc:contributor> Google &amp; Wikipédia</dc:contributor>
+	</dc:description>
+	<norme>1.0 (5eme édition)</norme>
+	<norme>"1.1 (2eme édition)</norme>
+	<basesur>
+			<UN>Standard Generalized Markup Language</UN>
+			<DEUX>Unicode</DEUX>
+	</basesur>
+	<developpe-par  xmlns:wwwc="https://www.w3.org/" xmlns:w3c="https://www.w3.org/" xmlns:fr="http://www.fr-language.fr" xmlns:en="http://www.en-language.en">
+		<w3c xmlns="https://www.w3.org/">
+			<type>Organisme de normalisation</type> 
+			<type>association à but non lucratif</type>
+			<dc:title>World Wide Web Consortium</dc:title>
+			<leitmotiv xmlns="http://www.fr-language.fr" 
+				label="Un seul web partout et pour tous" 
+				en:label="Leading the Web to its full potential" />
+		</w3c>
+	</developpe-par>
+</xml-knowledge-panel>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSS Flexbox layout</title>
+    <style>
+        .navigation {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            /*flex-flow: row wrap;*/
+            justify-content: flex-end;
+            list-style: none;
+            margin: 0;
+            background: Orange;
+        }
+
+        .navigation a {
+            display: block;
+            padding: 1em;
+            color: SlateBlue;
+            font: bold 1em Calibri, Optima, Arial, sans-serif;
+            text-decoration: none;
+        }
+
+        .navigation a:hover {
+            background: SlateBlue;
+            color: Orange;
+        }
+
+        @media all and (max-width: 800px) {
+            .navigation {
+                justify-content: space-around;
+            }
+        }
+        @media all and (max-width: 600px) {
+            .navigation {
+                flex-direction: column;
+                flex-wrap: wrap;
+                /*flex-flow: column wrap;*/
+                padding: 0;
+            }
+            .navigation a {
+                text-align: center;
+                padding: 10px;
+                border-top: 1px solid rgba(255, 255, 255, 0.3);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            }
+            .navigation li:last-of-type a {
+                border-bottom: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <ul class="navigation">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Products</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+</body>
+</html>

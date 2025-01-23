@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        #img1 {
+            width: 100%;
+            height: auto;
+        }
+
+        #img2 {
+            max-width: 100%;
+        }
+
+        figure {
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 */
+            position: relative;
+            width: 100%;
+        }
+        iframe {
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <p>Essayez de re-dimensionner la fenêtre du navigateur</p>
+
+    <img id="img2" src="../img/pulpitrock.jpg">
+    <img id="img1" src="../img/pulpitrock.jpg">
+
+    <figure>
+        <iframe src="https://www.youtube.com/embed/4Fqg43ozz7A">
+        </iframe>
+    </figure>
+
+</body>
+</body>
+</html>
