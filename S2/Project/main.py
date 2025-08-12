@@ -410,22 +410,33 @@ def navigate_to_reviews():
     time.sleep(1)
     return True
 
+from bs4 import BeautifulSoup
 
 def sign_in():
     logger.info(f'Signing in to {args.username}')
 
-    url = 'https://www.glassdoor.com/profile/login_input.htm'
+    url = 'https://www.glassdoor.com/member/profile/login'
     browser.get(url)
+    
+    html = browser.page_source
+    soup = BeautifulSoup(html, "html.parser")
+    print(soup.prettify())
 
+    time.sleep(20)
     # import pdb;pdb.set_trace()
 
-    email_field = browser.find_element(By.NAME, 'username')
-    password_field = browser.find_element(By.NAME, 'password')
-    submit_btn = browser.find_element(By.XPATH, '//button[@type="submit"]')
-
-
+    email_field = browser.find_element(By.ID, "inlineUserEmail")
     email_field.send_keys(args.username)
+    
+    submit_btn = browser.find_element(By.XPATH, '//button[@type="submit"]')
+    submit_btn.click()
+    
+    time.sleep(3)
+    
+    password_field = browser.find_element(By.ID, 'inlineUserPasssword')
     password_field.send_keys(args.password)
+    
+    submit_btn = browser.find_element(By.XPATH, '//button[@type="submit"]')
     submit_btn.click()
 
     time.sleep(3)
