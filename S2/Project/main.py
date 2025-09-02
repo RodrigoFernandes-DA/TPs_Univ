@@ -28,6 +28,7 @@ import logging
 import logging.config
 from selenium import webdriver as wd
 from selenium.webdriver import ActionChains
+import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import selenium
