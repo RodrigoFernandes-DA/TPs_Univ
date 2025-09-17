@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "tp-intro"
+version = "0.1.0"
+description = ""
+authors = ["Gauzere Benoit <benoit.gauzere@insa-rouen.fr>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+ipykernel = "^6.29.5"
+torch = "^2.4.1"
+torchvision = "^0.19.1"
+matplotlib = "^3.9.2"
+wandb = "^0.18.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
