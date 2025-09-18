@@ -15,6 +15,7 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 from sklearn.cluster import KMeans
+import os
 
     
 class HMM: # initialisation d'un HMM Gauche Droite discret
@@ -142,7 +143,9 @@ def dump_codebook(codebook,file_name):
 ###############################################################################
 def load_codebook(file_name):
     print("load_codebook",file_name,"...")
-    model_file = open(file_name,'rb')
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    pathfile = os.path.join(os.getcwd(), file_name)
+    model_file = open(pathfile,'rb')
     codebook = pickle.load(model_file)
     model_file.close()
     return codebook
