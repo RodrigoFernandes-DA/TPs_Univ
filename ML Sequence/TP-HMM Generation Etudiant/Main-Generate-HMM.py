@@ -16,6 +16,7 @@ import hmm
 from tqdm import tqdm
 import seaborn as sns
 from sklearn.metrics import confusion_matrix, classification_report
+from tensorflow.keras.datasets import mnist
 
 #color_names = list(mcolors.CSS4_COLORS)
 
@@ -88,10 +89,9 @@ for classe in range(3,4):
             total_errors += 1
 
     
-    # plt.figure(figsize=(9,1.1))
-    # plt.imshow(image, cmap='gray')
-    # plt.show()
-
+    plt.figure(figsize=(9,1.1))
+    plt.imshow(image, cmap='gray')
+    plt.show()
 
     
 CRR = correct_characters / total_characters
@@ -104,7 +104,6 @@ print("Generation ended successfully.")
 
 
 
-
 ###########################################################################
 # MNIST Test Dataset Evaluation
 ###########################################################################
@@ -112,25 +111,8 @@ print("\n" + "="*50)
 print("EVALUATING ON MNIST TEST DATASET")
 print("="*50)
 
-# Load MNIST test data
-# Assuming you have a function to load MNIST data
-# If not, you'll need to implement this part based on your data loading method
-try:
-    # Example of how you might load MNIST data
-    # You may need to adjust this based on your actual data loading method
-    from tensorflow.keras.datasets import mnist
-    (_, _), (X_test, y_test) = mnist.load_data()
-    
-    # Alternatively, if you're using the python-mnist package:
-    # from mnist import MNIST
-    # mndata = MNIST('path_to_mnist_data')
-    # X_test, y_test = mndata.load_testing()
-    
-    print(f"Loaded MNIST test data: {len(X_test)} samples")
-    
-except ImportError:
-    print("Please install tensorflow or provide MNIST test data")
-    sys.exit(1)
+(_, _), (X_test, y_test) = mnist.load_data()
+print(f"Loaded MNIST test data: {len(X_test)} samples")
 
 # Discretize the test data using the codebook
 print("Discretizing test data...")
