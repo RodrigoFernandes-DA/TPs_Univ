@@ -8,3 +8,8 @@ Koga - 43
 Sabrina - 43
 Blaine - 47
 Giovanni - 50
+
+
+
+4 exercicios, tem que fazer 3
+Avalia o que é feito nos TPs
