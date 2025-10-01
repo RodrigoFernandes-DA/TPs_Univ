@@ -14,7 +14,7 @@ class Bandit:
     
     def __init__(self):
         self.K=10
-        np.random.seed(5)
+        np.random.seed(6)
         self.variance = np.random.randint(-1,2,size=self.K)
         self.biais = np.random.poisson(3,self.K)
         while sum(self.biais == self.biais.max()) != 1 :
