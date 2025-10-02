@@ -137,17 +137,19 @@ class HMM: # initialisation d'un HMM Gauche Droite discret
         
         work_buffer[:,train_data[0]] = fwd[0,:] + bwd[0,:]
 
-        for t in range(1,T-1): # we miss T-1 because we need to be consistent 
-            c = train_data[t]  # with cumulate_den()
+        for t in range(1,T-1):
+            c = train_data[t]
             buffer = fwd[t,:] + bwd[t,:]
             for i in range(self.n_states):
-                work_buffer[i,c] = logaddexp(work_buffer[i,c], buffer[i] )
-        
+                work_buffer[i,c] = logaddexp(work_buffer[i,c], buffer[i])
+
         for i in range(self.n_states):
             for c in range(self.n_clusters):
-                sum_B_num[i,c] = logaddexp(sum_B_num[i,c], work_buffer[i,c] 
-                                        - log_likelihood)
-     
+                sum_B_num[i,c] = logaddexp(sum_B_num[i,c], work_buffer[i,c] - log_likelihood)
+
+        # return sum_B_num
+            
+            
     ###########################################################################
     def cumulate_A_num(self,train_data,fwd_lattice,
                        bwd_lattice,sum_A_num, log_likelihood):
@@ -155,45 +157,45 @@ class HMM: # initialisation d'un HMM Gauche Droite discret
         
         fwd_l = np.repeat(fwd_lattice[0,:],self.n_states).reshape(
             self.n_states,self.n_states)
-        bwd_l = np.repeat(bwd_lattice[1,:],self.n_states).reshape(
-            self.n_states,self.n_states)
+        bwd_l = np.repeat(bwd_lattice[1,:],self.n_states).reshape(self.n_states,self.n_states)
         frame_ll = np.repeat(self.log_B[:,train_data[1]],self.n_states).reshape(
             self.n_states,self.n_states)
         
         work_buffer = fwd_l + self.log_A + frame_ll.T + bwd_l.T
-        
+
         for t in range(1,T-1):
-            fwd_l = np.repeat(fwd_lattice[t,:],self.n_states).reshape(
-                self.n_states,self.n_states)
-            bwd_l = np.repeat(bwd_lattice[t+1,:],self.n_states).reshape(
-                self.n_states,self.n_states)
-            frame_ll = np.repeat(self.log_B[:,train_data[t+1]],self.n_states).reshape(
-                self.n_states,self.n_states)
+            fwd_l = np.repeat(fwd_lattice[t,:],self.n_states).reshape(self.n_states,self.n_states)
+            bwd_l = np.repeat(bwd_lattice[t+1,:],self.n_states).reshape(self.n_states,self.n_states)
+            frame_ll = np.repeat(self.log_B[:,train_data[t]], self.n_states).reshape(self.n_states,self.n_states)
             
             buffer = fwd_l + self.log_A + frame_ll.T + bwd_l.T
-    
+            
             for i in range (self.n_states):
                 for j in range(self.n_states):
-                    work_buffer[i,j] = logaddexp(work_buffer[i,j],buffer[i,j]) 
+                    work_buffer[i,j] = logaddexp(work_buffer[i,j],buffer[i,j])
         
         for i in range (self.n_states):
             for j in range(self.n_states):
-                sum_A_num[i,j] = logaddexp(sum_A_num[i,j],
-                                           work_buffer[i,j] - log_likelihood) 
+                sum_A_num[i,j] = logaddexp(sum_A_num[i,j],work_buffer[i,j] - log_likelihood)
+        
+        # return sum_A_num
+
 
     ###########################################################################  
     def cumulate_den(self,T,fwd,bwd, sum_den,log_likelihood):  
         
         work_buffer = fwd[0,:] + bwd[0,:]
-        
+
         for t in range(1,T-1):
             buffer = fwd[t,:] + bwd[t,:]
-                
             for i in range(self.n_states):
                 work_buffer[i] = logaddexp(work_buffer[i], buffer[i])
-        
+
         for i in range(self.n_states):
             sum_den[i] = logaddexp(sum_den[i], work_buffer[i] - log_likelihood)
+
+        # return sum_den
+        
             
     ###########################################################################            
     def Mstep(self,sum_B_num, sum_den, sum_A_num):
@@ -372,22 +374,7 @@ class HMM: # initialisation d'un HMM Gauche Droite discret
         return LL_train_history/n_train, LL_valid_history/n_valid, best_iteration 
     #####################################################
     def MstepViterbi(self,sum_B_num, sum_den, sum_A_num):
-        # sum_A_num[np.equal(sum_A_num,0)] = 1
-        # sum_B_num[np.equal(sum_B_num,0)] = 1
-        
-        SUM_DEN_A = np.repeat(sum_den,self.n_states).reshape(
-            self.n_states,self.n_states)
-        
-        SUM_DEN_B = np.repeat(sum_den,self.n_clusters).reshape(
-            self.n_states,self.n_clusters)
-        # SUM_DEN_B[np.equal(SUM_DEN_B,0)] = 1
 
-        
-        self.A = sum_A_num / SUM_DEN_A
-        self.B = sum_B_num / SUM_DEN_B
-
-        self.log_A = np.log(self.A)
-        self.log_B = np.log(self.B)
         
     ###########################################################################
     # Training a HMM
@@ -427,19 +414,7 @@ class HMM: # initialisation d'un HMM Gauche Droite discret
             ###################################################################    
             # LOOP for each sample of the class starts here
             for n in range(n_train):
-                LL, best_path = self.Viterbi(train_data[n,:],True)
-                LL_train += LL 
-                # print("train_data:",train_data[n,:].shape[0])
-                # print("best path:",best_path)
-                # print("best path:",best_path.T.shape[0])
-                T = train_data[n,:].shape[0]
-                for t in range(T-1):
-                    sum_B_num[best_path[t],train_data[n,t]] +=1
-                    sum_den[best_path[t]] += 1
-                    sum_A_num[best_path[t],best_path[t+1]] +=1
-
-                sum_B_num[best_path[T-1],train_data[n,T-1]] +=1
-                sum_den[best_path[T-1]] += 1
+                
 
                 ###############################################################
                 # End loop for E STEP over n_samples

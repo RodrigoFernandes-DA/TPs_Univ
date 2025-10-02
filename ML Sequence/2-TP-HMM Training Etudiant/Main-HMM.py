@@ -4,7 +4,7 @@ import numpy as np
 
 # pour charger les données MNIST avec pytorch
 # pip install python-mnist 
-from mnist import MNIST
+#from mnist import MNIST
 from sklearn.cluster import KMeans
 import sys
 import matplotlib.pyplot as plt
@@ -13,17 +13,34 @@ import pickle
 from tqdm import tqdm
 import os
 
+import struct
+
 import hmm
+
+def load_mnist_images(filename):
+    with open(filename, 'rb') as f:
+        magic, num_images, rows, cols = struct.unpack('>IIII', f.read(16))
+        assert magic == 2051, f'Erro: magic number inesperado {magic}'
+        images = np.frombuffer(f.read(), dtype=np.uint8)
+        images = images.reshape((num_images, rows * cols))
+        return images
+
+def load_mnist_labels(filename):
+    with open(filename, 'rb') as f:
+        magic, num_labels = struct.unpack('>II', f.read(8))
+        assert magic == 2049, f'Erro: magic number inesperado {magic}'
+        labels = np.frombuffer(f.read(), dtype=np.uint8)
+        return labels
 
 color_names = list(mcolors.CSS4_COLORS)
 
-TRAINING = True        # Training if True Testing otherwise
-FB_TRAINING = True     # Training with Forward Backward algorithm
+TRAINING = False        # Training if True Testing otherwise
+FB_TRAINING = True     # Training with Forward Backward algorithm / false = viterbi
 LOAD_CODEBOOK = True   # will load a pre-trained kmeans when starting training
 KMEANS_ONLY = False    # will run only kmeans if training is set to True
 
 D = 28           # 28 X 28
-n_clusters = 100  # number of clusters used to discretize each pixel columns
+n_clusters = 50  # number of clusters used to discretize each pixel columns
 n_states = 15
 Max_EM_iter = 20 # max number of iteration for EM
 N_classes = 10
@@ -36,11 +53,18 @@ dir_name = "Model_"+str(n_clusters)+"_"+str(n_states)
 
 if TRAINING == True:
     ###########################################################################
-    # load the digit MNIST dataset
-    data = MNIST('./samples')
-    X, y = data.load_training()
-    X = np.asarray(X)
-    y = np.asarray(y)
+    # # load the digit MNIST dataset
+    # data = MNIST('./samples')
+    # X, y = data.load_training()
+    # X = np.asarray(X)
+    # y = np.asarray(y)
+
+    # Caminho para os arquivos MNIST
+    path = './samples/'
+
+    # Carregar conjunto de treino
+    X = load_mnist_images(path + 'train-images-idx3-ubyte')
+    y = load_mnist_labels(path + 'train-labels-idx1-ubyte')
 
     #print('Dimensions: %s x %s' % (X.shape[0], X.shape[1]))
     #print('labels: %s' % np.unique(y))
@@ -117,10 +141,16 @@ else:
     ###########################################################################
     # load the digit MNIST dataset
     print("Loading MNIST test data...")
-    data = MNIST('./samples')
-    X_test, y_test = data.load_testing()
-    X_test = np.asarray(X_test)
-    y_test = np.asarray(y_test)
+    # data = MNIST('./samples')
+    # X_test, y_test = data.load_testing()
+    # X_test = np.asarray(X_test)
+    # y_test = np.asarray(y_test)
+
+    path = './samples/'
+
+    # Carregar conjunto de teste (opcional)
+    X_test = load_mnist_images(path + 't10k-images-idx3-ubyte')
+    y_test = load_mnist_labels(path + 't10k-labels-idx1-ubyte')
 
     N_test = X_test.shape[0]
 
