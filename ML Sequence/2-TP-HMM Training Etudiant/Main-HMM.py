@@ -41,7 +41,7 @@ KMEANS_ONLY = False    # will run only kmeans if training is set to True
 
 D = 28           # 28 X 28
 n_clusters = 50  # number of clusters used to discretize each pixel columns
-n_states = 15
+n_states = 10
 Max_EM_iter = 20 # max number of iteration for EM
 N_classes = 10
 ###############################################################################
