@@ -35,7 +35,7 @@ def load_mnist_labels(filename):
 color_names = list(mcolors.CSS4_COLORS)
 
 TRAINING = True    # Training if True Testing otherwise
-FB_TRAINING = True     # Training with Forward Backward algorithm / false = viterbi
+FB_TRAINING = False     # Training with Forward Backward algorithm / false = viterbi
 LOAD_CODEBOOK = True   # will load a pre-trained kmeans when starting training
 KMEANS_ONLY = False    # will run only kmeans if training is set to True
 
@@ -124,14 +124,14 @@ if TRAINING == True:
             LL_train_history, LL_valid_history, best_iteration = model.TrainViterbi(
                 classe,train_data,valid_data,Max_EM_iter,dir_name,file_name)
         
-        # plt.plot(range(1,Max_EM_iter), LL_valid_history[1:Max_EM_iter],
-        #          color = 'red', marker='o', label = str(classe)+" valid")
-        # plt.plot(range(1,Max_EM_iter), LL_train_history[1:Max_EM_iter],
-        #          color = 'blue', marker='o', label = str(classe)+" train")
-        # plt.title("Log Likelihood over EM iterations")
-        # plt.legend()
-        # plt.savefig(dir_name+'/class_'+str(classe)+'.png')
-        # plt.show()
+        plt.plot(range(1,Max_EM_iter), LL_valid_history[1:Max_EM_iter],
+                 color = 'red', marker='o', label = str(classe)+" valid")
+        plt.plot(range(1,Max_EM_iter), LL_train_history[1:Max_EM_iter],
+                 color = 'blue', marker='o', label = str(classe)+" train")
+        plt.title("Log Likelihood over EM iterations")
+        plt.legend()
+        plt.savefig(dir_name+'/class_'+str(classe)+'.png')
+        plt.show()
         
         print('Training Ended successfully')
 
