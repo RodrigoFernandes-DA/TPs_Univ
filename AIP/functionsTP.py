@@ -250,7 +250,7 @@ def iterate_snake(x, y, a, b, fx, fy, gamma=0.1, n_iters=10, return_all=True):
 if __name__ == "__main__":
     image_path = 'Image2.jpg'
     image = cv2.imread(image_path)
-    # image = cv2.cvtColor(L_image, cv2.COLOR_BGR2GRAY)
+    image = cv2.cvtColor(L_image, cv2.COLOR_BGR2GRAY)
 
     smoothed = cv2.GaussianBlur((image-image.min()) / (image.max()-image.min()), (5,5), sigma=10.0)
 
