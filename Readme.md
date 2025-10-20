@@ -13,3 +13,6 @@ https://www.reddit.com/r/LaTeX/comments/1jzd25t/any_modern_looking_cv_templates_
 
 cd /home/ENT-UR/AUTOFS/STUDENTS/coelhrod/Git
 
+
+git filter-branch --force --index-filter "git rm --cached --ignore-unmatch 'ML Sequence/3-TP-Neuro-HMM Etudiant/MNIST_5digitsDifficile.pkl'" --prune-empty --tag-name-filter cat -- --all
+
