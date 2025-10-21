@@ -12,7 +12,7 @@ import matplotlib.colors as mcolors
 import pickle
 from tqdm import tqdm
 import os
-# import editdistance
+import editdistance
 
 import torch
 from torch import nn
@@ -74,15 +74,15 @@ if __name__ == '__main__':
     D = 28
     l_seq_digits = 5
     
-    TRAINING = True  # Training if True Testing otherwise
+    TRAINING = False  # Training if True Testing otherwise
     SHOW = True
     batch_size = 128
 
     N_train = 10000 # digits
     N_valid = 1000
     # Sliding window parameters
-    w_width = 3
-    stride = 2
+    w_width = 5
+    stride = 4
 
     x_train,x_test,y_train,y_test = Load_MNISTSequences('MNIST_5digitsDifficile.pkl')
     N_train = len(y_train)
@@ -113,7 +113,7 @@ if __name__ == '__main__':
         'max_length':140,
         'END_TRAIN': END_TRAIN,
         'START_VALID':START_VALID,
-        'n_states':5,
+        'n_states':3,
     }
     
     model_name = "MLP_"+str(config['input_features'])+"_"+"_"+str(config['hidden_size'])+"_"+str(config['n_states'])+"_"+str(config['N_train'])
@@ -128,11 +128,11 @@ if __name__ == '__main__':
         gt_valid = y_train[config['N_max_seq'] - config['N_valid_seq']:]
         
         ###########################################################
-        if SHOW:
-            for i in range(5):
-                plt.imshow(np.flip(train[i].T,axis=0), cmap='gray')
-                plt.title(gt_train[i])
-                plt.show()     
+        # if SHOW:
+        #     for i in range(5):
+        #         plt.imshow(np.flip(train[i].T,axis=0), cmap='gray')
+        #         plt.title(gt_train[i])
+        #         plt.show()     
             
         # create the list of HMM model of digits with equi probable intialization
         Models = []    
@@ -187,17 +187,17 @@ if __name__ == '__main__':
             # retrieve best symbol sequence from best states sequence
             bs = neuro_hmm.StatesToSymbols(best_path,config['n_states'])
     
-            if SHOW:
+            if SHOW and n<10:
                 plt.imshow(np.flip(x_test[n].T,axis=0), cmap='gray')
                 plt.title(gt+" "+bs)
                 plt.show()       
                 print("GT:",gt,"recognized",bs)
-            print("best path",best_path)
-            # Edit_dist = editdistance.eval(gt,bs)
-            # FP += Edit_dist  
+                print("best path",best_path)
+            Edit_dist = editdistance.eval(gt,bs)
+            FP += Edit_dist  
             TOTAL += len(gt)       
-            # if Edit_dist !=0:
-                # String_FP +=1
+            if Edit_dist !=0:
+                String_FP +=1
         print("FP",FP)
         print("TOTAL characters",TOTAL)
         print("String FP",String_FP)

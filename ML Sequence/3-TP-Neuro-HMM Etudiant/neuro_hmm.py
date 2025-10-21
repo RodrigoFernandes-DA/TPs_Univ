@@ -389,7 +389,7 @@ def Embedded_Training(Models,train_data,valid_data,gt_train,gt_valid,config,Mode
             DATA, PRED = Concat(train_data[begin:end],train_pred)
             mlp_loss.append(mlp.train_on_batch(DATA,PRED, my_mlp,my_loss, my_optimizer))
         ################################################################
-        if iteration == 40:
+        if iteration > 35 or iteration < 4:
             plt.plot(mlp_loss,color = 'blue', label = " MLP train loss")
             plt.legend()
             plt.title("Embedded training over batch iteration "+str(iteration))
@@ -409,7 +409,7 @@ def Embedded_Training(Models,train_data,valid_data,gt_train,gt_valid,config,Mode
                                               1)
         LL_valid_history.append( LL_valid/n_valid)
 
-        if iteration == 40:
+        if iteration > 35 or iteration < 4:
             plt.plot(LL_valid_history,color = 'blue', label = "HMM valid LL")
             plt.legend()
             plt.title("Embedded training over epochs "+str(iteration))
