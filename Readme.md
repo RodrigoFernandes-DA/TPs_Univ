@@ -1,37 +1,37 @@
 Travaux Pratiques - Master Sciences des Donnees
 
-
-graphs
-4 exercicios, tem que fazer 3
-Avalia o que é feito nos TPs
-
-
-
-
-https://www.reddit.com/r/LaTeX/comments/1jzd25t/any_modern_looking_cv_templates_in_latex/
-
-
+#### Mudar de Diretorio ############################
 cd /home/ENT-UR/AUTOFS/STUDENTS/coelhrod/Git
-
 cd "/home/ENT-UR/AUTOFS/STUDENTS/coelhrod/Git/ML Sequence/3-TP-Neuro-HMM Etudiant"
 
-
-Apagar do historico
+#### Apagar do historico
 git filter-branch --force --index-filter "git rm --cached --ignore-unmatch 'ML Sequence/3-TP-Neuro-HMM Etudiant/MNIST_5digitsDifficile.pkl'" --prune-empty --tag-name-filter cat -- --all
 
-Varigicar se apagou
+#### Varificar se apagou
 git log --all -- ML\ Sequence/3-TP-Neuro-HMM\ Etudiant/MNIST_5digitsDifficile.pkl
 
-Senao, limpar do cache
+#### Senao, limpar do cache
 rm -rf .git/refs/original/
 git reflog expire --expire=now --all
 git gc --prune=now --aggressive
 
+
+#### Pull forçado ################################
+git checkout main
+git fetch origin
+git reset --hard origin/main
+
+
+#### Ativar e desativar venv ####################
 source venvTP/bin/activate
 deactivate
 rm -rf venv
 
+#### pip install ################################
 python3.12 -m pip install --user tqdm==4.66.4 --break-system-packages
+
+
+
 
 
 https://learngerman.dw.com/en/learn-german/s-9528
