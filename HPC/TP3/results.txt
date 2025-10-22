@@ -1,0 +1,22 @@
+For 1000000 picks, the approximation of pi is 3.141704 (0.00 %) compute in 6.15 seconds
+For 1000000 picks, the approximation of pi is 3.1414 (0.00 %) compute in 3.02 seconds
+For 1000000 picks, the approximation of pi is 3.142708 (0.00 %) compute in 2.16 seconds
+For 1000000 picks, the approximation of pi is 3.141 (0.00 %) compute in 1.61 seconds
+
+
+For 1000000 picks, the approximation of pi is 3.14086 (0.00 %) compute in 5.87 seconds
+For 1000000 picks, the approximation of pi is 3.1419 (0.01%) computed in 2.96 seconds
+For 1000000 picks, the approximation of pi is 3.141928 (0.01%) computed in 1.98 seconds
+For 1000000 picks, the approximation of pi is 3.139548 (0.07%) computed in 1.53 seconds
+
+
+For 1000000 picks, the approximation of pi is 3.14398 (0.00 %) compute in 6.07 seconds
+For 1000000 picks, the approximation of pi is 3.140868 (0.00 %) compute in 2.99 seconds
+For 1000000 picks, the approximation of pi is 3.13888 (0.00 %) compute in 2.18 seconds
+For 1000000 picks, the approximation of pi is 3.143788 (0.00 %) compute in 1.68 seconds
+
+
+For 1000000 picks, the approximation of pi is 3.141408 (0.01% error), computed in 5.86 s
+For 1000000 picks, the approximation of pi is 3.139748 (0.06% error), computed in 2.97 s
+For 1000000 picks, the approximation of pi is 3.141392 (0.01% error), computed in 2.12 s
+For 1000000 picks, the approximation of pi is 3.143028 (0.05% error), computed in 1.57 s
