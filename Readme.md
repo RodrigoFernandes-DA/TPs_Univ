@@ -2,7 +2,7 @@ Travaux Pratiques - Master Sciences des Donnees
 
 #### Mudar de Diretorio ############################
 cd /home/ENT-UR/AUTOFS/STUDENTS/coelhrod/Git
-cd "/home/ENT-UR/AUTOFS/STUDENTS/coelhrod/Git/ML Sequence/3-TP-Neuro-HMM Etudiant"
+cd "/home/ENT-UR/AUTOFS/STUDENTS/coelhrod/Git/ML Sequence/4-TP-CTC"
 
 #### Apagar do historico
 git filter-branch --force --index-filter "git rm --cached --ignore-unmatch 'ML Sequence/3-TP-Neuro-HMM Etudiant/MNIST_5digitsDifficile.pkl'" --prune-empty --tag-name-filter cat -- --all
@@ -34,9 +34,9 @@ python3.12 -m pip install --user tqdm==4.66.4 --break-system-packages
 
 
 
-https://learngerman.dw.com/en/learn-german/s-9528
-https://dartdrill.dartmouth.edu/driller
-https://germanforenglishspeakers.com/
-https://german.net/exercises/tenses/
+https://learngerman.dw.com/en/learn-german/s-9528 # Videos
+https://dartdrill.dartmouth.edu/driller # Exercicios
+https://germanforenglishspeakers.com/ # Gramatica
+https://german.net/exercises/tenses/ # Exercicios
 https://www.vhs-lernportal.de/wws/9.php#/wws/home.php?sid=91614352505798270961022922292450Sa7fc939a
 https://www.deutschakademie.de/online-deutschkurs/deutschkurs
