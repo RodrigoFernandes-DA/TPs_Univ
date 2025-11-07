@@ -168,7 +168,7 @@ if __name__ == '__main__':
             valid_loss.append(CTC.valid_loop(valid_dataloader,my_lstm,loss_fn))
 
             ###################################################################
-            if SHOW and (e<10 or e=config['num_epochs']-1):
+            if SHOW and (e<10 or e==config['num_epochs']-1):
                 plt.plot(valid_loss,color = 'red', label = "valid")
                 plt.plot(train_loss, color = 'blue', label = " train")
                 plt.title("CTC loss over epochs")
