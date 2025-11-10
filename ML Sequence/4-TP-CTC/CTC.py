@@ -71,8 +71,8 @@ def valid_loop(dataloader, model, loss_fn):
     with torch.no_grad():
         for X, y,X_l,y_l in dataloader:
             pred = torch.nn.functional.log_softmax(model(X.float()),dim = 2)
-            # pred = torch.nn.functional.log_softmax(model(X.float()),dim = 1)
             valid_loss += loss_fn(pred, y,X_l,y_l).item()
+            # pred = torch.nn.functional.log_softmax(model(X.float()),dim = 1)
             # valid_loss += loss_fn(pred.permute(2,0,1), y,X_l,y_l).item()
 
     valid_loss /= nb_batches
@@ -114,3 +114,92 @@ class CNN (nn.Module):
     def forward(self, x):
         output = self.cnn(x)
         return output
+    
+
+
+class LSTMWithMLP(nn.Module):
+    def __init__(self, config):
+        super(LSTMWithMLP, self).__init__()
+        self.hidden_size = config['hidden_size']
+        self.n_layer = config['lstm_layer']
+
+        # Define LSTM layer
+        self.lstm = nn.LSTM(config['input_features'], 
+                            config['hidden_size'], 
+                            config['lstm_layer'], 
+                            batch_first=False,
+                            bidirectional=config['blstm']) 
+        
+        # Define MLP layer (fully connected layer after LSTM)
+        in_features = config['hidden_size'] * (2 if config['blstm'] else 1)
+        # self.mlp = nn.Sequential(
+        #     nn.Linear(in_features, config['hidden_size']),
+        #     nn.ReLU(),  # Optional activation for the MLP
+        #     nn.Linear(config['hidden_size'], config['num_classes'])  # Final output size matches number of classes (including blank label)
+        # )
+        self.fc1 = nn.Linear(in_features, config['hidden_size'])
+
+    def forward(self, x):
+        '''Forward pass'''
+        # Pass through LSTM
+        lstm_out, (hn, cn) = self.lstm(x)
+        
+        # Pass the LSTM output through the MLP
+        out = self.mlp(lstm_out)
+        
+        return out
+    
+
+class CNN_LSTM(nn.Module):
+    def __init__(self, config):
+        super(CNN_LSTM, self).__init__()
+        self.config = config
+        self.device = config['device']
+
+        # === CNN feature extractor (use the same CNN as before, minus final output conv) ===
+        self.cnn_features = nn.Sequential(
+            nn.Conv2d(in_channels=1, out_channels=16, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(in_channels=16, out_channels=64, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2),
+            nn.Conv2d(in_channels=64, out_channels=32, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(2),
+        )
+
+        # After the last pooling:
+        # Input height 28 → after 2x pooling → 7
+        # So features will be [B, 32, 7, T']
+        # We’ll flatten the height (7) dimension.
+
+        # === LSTM layer ===
+        self.hidden_size = config['hidden_size']
+        self.lstm_layer = config['lstm_layer']
+        self.blstm = config['blstm']
+        in_features = 32 * 7  # flatten height dimension into features per timestep
+
+        self.lstm = nn.LSTM(in_features,
+                            self.hidden_size,
+                            self.lstm_layer,
+                            batch_first=False,
+                            bidirectional=self.blstm)
+
+        lstm_out_size = self.hidden_size * (2 if self.blstm else 1)
+
+        # === Final linear projection to num_classes ===
+        self.fc = nn.Linear(lstm_out_size, config['num_classes'])
+
+    def forward(self, x):
+        # x: [B, 1, 28, W]
+        features = self.cnn_features(x)           # [B, 32, 7, T']
+        B, C, H, T = features.size()
+
+        features = features.permute(0, 3, 1, 2)   # [B, T', C, H]
+        features = features.reshape(B, T, C * H)  # [B, T', 32*7]
+        features = features.permute(1, 0, 2)      # [T', B, 224] for LSTM (time-major)
+
+        lstm_out, _ = self.lstm(features)         # [T', B, hidden]
+        out = self.fc(lstm_out)                   # [T', B, num_classes]
+
+        return out

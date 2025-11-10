@@ -64,18 +64,18 @@ class DigitSequenceDataset(Dataset):
 ###############################################################
 def pad_collate(batch): # recebe um batch de train
     (xx, yy) = zip(*batch)
-    x_lens = [len(x) for x in xx]
-    # x_lens = [int(len(x)/4) for x in xx]
+    # x_lens = [len(x) for x in xx]
+    x_lens = [int(len(x)/4) for x in xx]
     y_lens = [len(y) for y in yy]
 
     x_lens = torch.LongTensor(x_lens) # todas as len dos exemplos
     y_lens = torch.LongTensor(y_lens)
-    xx_pad = torch.nn.utils.rnn.pad_sequence(xx, batch_first=False, padding_value=-1)
-    # xx_pad = torch.nn.utils.rnn.pad_sequence(xx, batch_first=True, padding_value=0)
+    # xx_pad = torch.nn.utils.rnn.pad_sequence(xx, batch_first=False, padding_value=-1)
+    xx_pad = torch.nn.utils.rnn.pad_sequence(xx, batch_first=True, padding_value=0)
     yy_pad = torch.nn.utils.rnn.pad_sequence(yy, batch_first=True, padding_value=-1)
 
-    # return xx_pad.transpose(1,2).flip(1)[:,None,:,:], yy_pad, x_lens, y_lens 
-    return xx_pad, yy_pad, x_lens, y_lens 
+    return xx_pad.transpose(1,2).flip(1)[:,None,:,:], yy_pad, x_lens, y_lens 
+    # return xx_pad, yy_pad, x_lens, y_lens 
 
 #######################################
 if __name__ == '__main__':
@@ -98,8 +98,8 @@ if __name__ == '__main__':
         'blank_label':10,
         'hidden_size':256, #128
         'lstm_layer':2,#2
-        'blstm': False, #True
-        #'device': device,
+        'blstm': True, #True
+        'device': device,
     }
 
     x_train,x_test,y_train,y_test = Load_MNISTSequences('MNIST_5digitsDifficile.pkl')
@@ -166,7 +166,8 @@ if __name__ == '__main__':
             #     break
         ############################################################
  
-        my_lstm = CTC.LSTM(config)
+        # my_lstm = CTC.LSTM(config)
+        my_lstm = CTC.CNN_LSTM(config)
         loss_fn = torch.nn.CTCLoss(blank=config['blank_label'], reduction='mean')
         optimizer = torch.optim.Adam(my_lstm.parameters(),lr=config['learning_rate'])
         #optimizer = torch.optim.RMSprop(my_lstm.parameters(),lr=config['learning_rate'])
@@ -206,7 +207,8 @@ if __name__ == '__main__':
                                                         batch_size = 1,
                                                         collate_fn = pad_collate)
         
-        my_lstm = CTC.LSTM(config)
+        # my_lstm = CTC.LSTM(config)
+        my_lstm = CTC.CNN_LSTM(config)
         my_lstm.load_state_dict(torch.load(model_name))
     
         TOTAL = 0
@@ -222,6 +224,8 @@ if __name__ == '__main__':
                 y = ''.join([str(y[i]) for i in range(y.shape[0])])
 
                 pred = my_lstm(X.float())
+                # pred = pred.permute(2, 0, 1)          # [T, B, C]
+                # prediction = torch.nn.functional.log_softmax(pred, dim=2)
                 prediction = pred[:,0,:].numpy()
                 y_pred = np.argmax(prediction,axis=1) 
                 best_sequence = CTC.StatesToSymbols(y_pred,X_l,config)
