@@ -80,7 +80,7 @@ def pad_collate(batch): # recebe um batch de train
 #######################################
 if __name__ == '__main__':
     
-    TRAINING = False # Training if True Testing otherwise
+    TRAINING = True # Training if True Testing otherwise
     SHOW = True
     
     device="cpu"
