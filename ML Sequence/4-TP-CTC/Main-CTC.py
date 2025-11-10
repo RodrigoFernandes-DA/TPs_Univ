@@ -63,21 +63,24 @@ class DigitSequenceDataset(Dataset):
                                                                                          
 ###############################################################
 def pad_collate(batch): # recebe um batch de train
-  (xx, yy) = zip(*batch)
-  x_lens = [len(x) for x in xx]
-  y_lens = [len(y) for y in yy]
+    (xx, yy) = zip(*batch)
+    x_lens = [len(x) for x in xx]
+    # x_lens = [int(len(x)/4) for x in xx]
+    y_lens = [len(y) for y in yy]
 
-  x_lens = torch.LongTensor(x_lens) # todas as len dos exemplos
-  y_lens = torch.LongTensor(y_lens)
-  xx_pad = torch.nn.utils.rnn.pad_sequence(xx, batch_first=False, padding_value=-1)
-  yy_pad = torch.nn.utils.rnn.pad_sequence(yy, batch_first=True, padding_value=-1)
+    x_lens = torch.LongTensor(x_lens) # todas as len dos exemplos
+    y_lens = torch.LongTensor(y_lens)
+    xx_pad = torch.nn.utils.rnn.pad_sequence(xx, batch_first=False, padding_value=-1)
+    # xx_pad = torch.nn.utils.rnn.pad_sequence(xx, batch_first=True, padding_value=0)
+    yy_pad = torch.nn.utils.rnn.pad_sequence(yy, batch_first=True, padding_value=-1)
 
-  return xx_pad, yy_pad, x_lens, y_lens 
+    # return xx_pad.transpose(1,2).flip(1)[:,None,:,:], yy_pad, x_lens, y_lens 
+    return xx_pad, yy_pad, x_lens, y_lens 
 
 #######################################
 if __name__ == '__main__':
     
-    TRAINING = True  # Training if True Testing otherwise
+    TRAINING = False # Training if True Testing otherwise
     SHOW = True
     
     device="cpu"
@@ -93,8 +96,8 @@ if __name__ == '__main__':
         'learning_rate':1e-3,
         'num_classes':11,
         'blank_label':10,
-        'hidden_size':128, #256
-        'lstm_layer':1,#2
+        'hidden_size':256, #128
+        'lstm_layer':2,#2
         'blstm': False, #True
         #'device': device,
     }
@@ -144,14 +147,23 @@ if __name__ == '__main__':
                                                        collate_fn = pad_collate)
                                                     
         ###########################################################
-        if SHOW:
-            for batch in (train_dataloader):
-                for i in range(5):
-                    plt.imshow(np.flip(batch[0][:,i,:].numpy().T,axis=0), cmap='gray')
-                    plt.title(batch[1][i])
-                    plt.show()    
+        # if SHOW:
+            # for batch in (train_dataloader):
+            #     for i in range(5):
+            #         plt.imshow(np.flip(batch[0][:,i,:].numpy().T,axis=0), cmap='gray')
+            #         plt.title(batch[1][i])
+            #         plt.show()    
               
-                break
+            #     break
+            
+            # for batch in train_dataloader:
+            #     images, labels, _, _ = batch
+            #     for i in range(5):
+            #         img = images[i, 0, :, :].numpy()  # [1,28,W] → [28,W]
+            #         plt.imshow(np.flip(img, axis=0), cmap='gray')
+            #         plt.title(labels[i].numpy())
+            #         plt.show()
+            #     break
         ############################################################
  
         my_lstm = CTC.LSTM(config)
@@ -168,7 +180,7 @@ if __name__ == '__main__':
             valid_loss.append(CTC.valid_loop(valid_dataloader,my_lstm,loss_fn))
 
             ###################################################################
-            if SHOW and (e<10 or e==config['num_epochs']-1):
+            if SHOW and (e<3 or e==config['num_epochs']-1):
                 plt.plot(valid_loss,color = 'red', label = "valid")
                 plt.plot(train_loss, color = 'blue', label = " train")
                 plt.title("CTC loss over epochs")
