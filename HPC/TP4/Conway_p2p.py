@@ -95,46 +95,6 @@ def conway_p2p(grid, epochs):
     return grid
 
 
-def conway_coll(grid, epochs):
-    comm = MPI.COMM_WORLD
-    rank = comm.Get_rank()
-    size = comm.Get_size()
-
-    irange, jrange = grid.shape
-
-    # Determine local sizes (balanced decomposition)
-    counts = [irange // size + (1 if r < irange % size else 0) for r in range(size)]
-    starts = [sum(counts[:r]) for r in range(size)]
-
-    local_rows = counts[rank]
-    local_grid = np.zeros((local_rows, jrange), dtype=grid.dtype)
-
-    for ep in range(epochs):
-        # Scatter subgrids
-        sendbuf = None
-        if rank == 0:
-            sendbuf = [grid, tuple(np.array(counts) * jrange), tuple(np.array(starts) * jrange), MPI.DOUBLE]
-
-        comm.Scatterv(sendbuf, local_grid, root=0)
-
-        # Enlarge, step, crop
-        egrid = conway.enlarge_grid(local_grid)
-        egrid = conway.life_step(egrid)
-        local_result = egrid[1:-1, 1:-1]
-
-        # Gather results
-        recvbuf = None
-        if rank == 0:
-            recvbuf = np.zeros_like(grid)
-        comm.Gatherv(local_result, [recvbuf, tuple(np.array(counts) * jrange), tuple(np.array(starts) * jrange), MPI.DOUBLE], root=0)
-
-        # Prepare grid for next iteration
-        grid = comm.bcast(recvbuf if rank == 0 else None, root=0)
-
-    return grid
-
-
-
 if (__name__ == "__main__"):
     # exemplo de uso
     # criar grid inicial no rank 0 e broadcast para todos (ou cada rank pode gerar a mesma seed)
