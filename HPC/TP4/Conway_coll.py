@@ -82,6 +82,8 @@ def conway_coll(grid, epochs):
     """
     Conway's Game of Life using collective communications for ghost cell exchange
     """
+    total_start = MPI.Wtime()
+    
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
     size = comm.Get_size()
@@ -105,30 +107,38 @@ def conway_coll(grid, epochs):
 
     # Broadcast final grid to all processes
     grid = comm.bcast(grid if rank == 0 else None, root=0)
-    return grid
-
+    total_end = MPI.Wtime()
+    return grid, total_end - total_start
+        
 if __name__ == "__main__":
-    # Example usage
-    # Create initial grid on rank 0 and broadcast to all
-    if rank == 0:
-        grid = conway.init_grid((6, 6), threshold=0.4)
-    else:
-        grid = None
-    
-    # Broadcast the full global grid to all ranks
-    grid = comm.bcast(grid, root=0)
+    grid_sizes = [(10, 10), (100, 100), (1000, 1000), (2000, 2000)]
+    epochs = 5
+    timings = []
 
-    if rank == 0:
-        print("Grid inicial:")
-        print(grid)
+    for gsize in grid_sizes:
+        # Initialize grid on rank 0
+        if rank == 0:
+            grid = conway.init_grid(gsize, threshold=0.4)
+        else:
+            grid = None
 
-    # Run the parallel Conway with collective communication
-    result = conway_coll(grid, epochs=2)
+        # Broadcast to all ranks
+        grid = comm.bcast(grid, root=0)
 
+        # Run Conway and measure total execution time
+        _, exec_time = conway_coll(grid, epochs)
+
+        # Collect times from all ranks and take the max (slowest rank determines runtime)
+        total_time = comm.reduce(exec_time, op=MPI.MAX, root=0)
+
+        if rank == 0:
+            timings.append((gsize[0], gsize[1], epochs, total_time))
+
+    # Print results only on rank 0
     if rank == 0:
-        print("Resultado final (recolhido no rank 0):")
-        print(result)
-        # Optional: show image
-        plt.imshow(result, cmap=plt.cm.binary)
-        plt.title("Resultado final com comunicação coletiva")
-        plt.show()
+        print("\n=== Performance Results ===")
+        print(f"{'Grid Size':>12} | {'Epochs':>6} | {'Execution Time (s)':>20}")
+        print("-" * 45)
+        for n, m, ep, t in timings:
+            print(f"{str((n,m)):>12} | {ep:>6} | {t:>20.6f}")
+        print("-" * 45)

@@ -1,45 +1,32 @@
-from mpi4py import MPI
+from mpi4py import MPI 
 import numpy as np
-import sys
-import time
 import M2SD_HPC_TP04_MPIConway as conway
 import matplotlib.pyplot as plt
 
-comm=MPI.COMM_WORLD
-rank=comm.Get_rank()
-size=comm.Get_size()
+comm = MPI.COMM_WORLD
+rank = comm.Get_rank()
+size = comm.Get_size()
 
 
-def  idim_local(grid):
-    "en fonction du rang du processus retourne le nombre de ligne locale à traiter ainsi que la position (coordonnée de la 1ère ligne) de la sous-grille dans la grille globale"
-    
+def idim_local(grid):
     irange, jrange = grid.shape
-    
-    x = irange/size
-    
+    x = irange / size
     init = x * rank
-    fin = init + x -1
-    
-    if rank == size -1:
+    fin = init + x - 1
+    if rank == size - 1:
         fin = irange
-    
     return int(init), int(fin)
 
+
 def create_local_grid(grid):
-    
     init, fin = idim_local(grid)
-    
-    sousgrid = grid[init:fin+1,:]
-    
+    sousgrid = grid[init:fin + 1, :]
     ghostgrid = conway.enlarge_grid(sousgrid)
-    
+
     up = rank - 1
     down = rank + 1
 
-    # Send/receive using non-blocking to avoid deadlocks
     reqs = []
-
-    # Send top row and receive bottom ghost
     if down < size:
         reqs.append(comm.Isend(sousgrid[-1, :].copy(), dest=down))
         recv_bottom = np.empty_like(sousgrid[0, :])
@@ -47,7 +34,6 @@ def create_local_grid(grid):
     else:
         recv_bottom = None
 
-    # Send bottom row and receive top ghost
     if up >= 0:
         reqs.append(comm.Isend(sousgrid[0, :].copy(), dest=up))
         recv_top = np.empty_like(sousgrid[0, :])
@@ -57,134 +43,61 @@ def create_local_grid(grid):
 
     MPI.Request.Waitall(reqs)
 
-    # Fill ghost zones
     if recv_top is not None:
         ghostgrid[0, 1:-1] = recv_top
     if recv_bottom is not None:
         ghostgrid[-1, 1:-1] = recv_bottom
-        
-    # print(f"rank = {rank} \n {ghostgrid}")
 
     return ghostgrid
-   
-           
+
+
 def conway_p2p(grid, epochs):
-    # comm = MPI.COMM_WORLD
-    # rank = comm.Get_rank()
-    # size = comm.Get_size()
+    total_start = MPI.Wtime()
 
     for ep in range(epochs):
-        # Cada processo cria sua grade local com bordas corretas
+        # Local grid creation + halo exchange
         local_grid = create_local_grid(grid)
-        
-        # Aplica o passo do Jogo da Vida localmente
         egrid = conway.life_step(local_grid)
-        
-        # Remove as bordas fantasmas
         local_result = egrid[1:-1, 1:-1]
-
-        # Junta tudo no rank 0
         gathered = comm.gather(local_result, root=0)
 
         if rank == 0:
-            # Reconstrói a grade global para a próxima época
             grid = np.vstack(gathered)
 
-    # Broadcast final da grade completa para todos (opcional)
+    total_end = MPI.Wtime()
     grid = comm.bcast(grid if rank == 0 else None, root=0)
-    return grid
+    return grid, total_end - total_start
 
 
-if (__name__ == "__main__"):
-    # exemplo de uso
-    # criar grid inicial no rank 0 e broadcast para todos (ou cada rank pode gerar a mesma seed)
-    if rank == 0:
-        grid = conway.init_grid((6, 6), threshold=0.4)
-    else:
-        grid = None
-    # broadcast the full global grid to all ranks so each rank can compute idim_local
-    grid = comm.bcast(grid, root=0)
+if __name__ == "__main__":
+    grid_sizes = [(10, 10), (100, 100), (1000, 1000), (2000, 2000)]
+    epochs = 5
+    timings = []
 
-    if rank == 0:
-        print("Grid inicial:")
-        print(grid)
-
-    # Test both versions
-    if rank == 0:
-        print("\n=== Testing collective version ===")
-    
-    result_coll = conway_coll(grid, epochs=2)
-
-    if rank == 0:
-        print("Resultado final (collective):")
-        print(result_coll)
-
-    if rank == 0:
-        print("\n=== Testing point-to-point version ===")
-    
-    result_p2p = conway_p2p(grid, epochs=2)
-
-    if rank == 0:
-        print("Resultado final (point-to-point):")
-        print(result_p2p)
-        
-        # Check if results are the same
-        if np.array_equal(result_coll, result_p2p):
-            print("\n✓ Both versions produced identical results!")
+    for gsize in grid_sizes:
+        # Initialize grid on rank 0
+        if rank == 0:
+            grid = conway.init_grid(gsize, threshold=0.4)
         else:
-            print("\n✗ Results differ between versions!")
-        
-        # opcional: mostrar imagem
-        plt.figure(figsize=(12, 5))
-        plt.subplot(1, 2, 1)
-        plt.imshow(result_coll, cmap=plt.cm.binary)
-        plt.title("Collective Version")
-        
-        plt.subplot(1, 2, 2)
-        plt.imshow(result_p2p, cmap=plt.cm.binary)
-        plt.title("Point-to-Point Version")
-        plt.show()
-        
-        
-        
-        
-        
-        
-# if __name__ == "__main__":
-#     # exemplo de uso
-#     # criar grid inicial no rank 0 e broadcast para todos (ou cada rank pode gerar a mesma seed)
-#     if rank == 0:
-#         grid = conway.init_grid((6, 6), threshold=0.4)
-#     else:
-#         grid = None
-    
-#     # Broadcast the full global grid to all ranks so each rank can compute idim_local
-#     grid = comm.bcast(grid, root=0)
+            grid = None
 
-#     if rank == 0:
-#         print("Grid inicial:")
-#         print(grid)
+        # Broadcast to all ranks
+        grid = comm.bcast(grid, root=0)
 
-#     # Run both versions for comparison
-#     if rank == 0:
-#         print("\n=== Conway com Comunicação Coletiva ===")
-    
-#     start_time = time.time()
-#     result_coll = conway_coll(grid, epochs=2)
-#     coll_time = time.time() - start_time
+        # Run Conway and measure total execution time
+        _, exec_time = conway_p2p(grid, epochs)
 
-#     if rank == 0:
-#         print("Resultado final (comunicação coletiva):")
-#         print(result_coll)
-#         print(f"Tempo com comunicação coletiva: {coll_time:.6f} segundos")
-        
-#         # opcional: mostrar imagem
-#         plt.figure(figsize=(12, 5))
-#         plt.subplot(1, 2, 1)
-#         plt.imshow(grid, cmap=plt.cm.binary)
-#         plt.title("Grid Inicial")
-        
-#         plt.subplot(1, 2, 2)
-#         plt.imshow(result_coll, cmap=plt.cm.binary)
-#         plt.title("Resultado Final (Coletiva)")
-#         plt.show()
+        # Collect times from all ranks and take the max (slowest rank determines runtime)
+        total_time = comm.reduce(exec_time, op=MPI.MAX, root=0)
+
+        if rank == 0:
+            timings.append((gsize[0], gsize[1], epochs, total_time))
+
+    # Print results only on rank 0
+    if rank == 0:
+        print("\n=== Performance Results ===")
+        print(f"{'Grid Size':>12} | {'Epochs':>6} | {'Execution Time (s)':>20}")
+        print("-" * 45)
+        for n, m, ep, t in timings:
+            print(f"{str((n,m)):>12} | {ep:>6} | {t:>20.6f}")
+        print("-" * 45)
