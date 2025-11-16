@@ -51,50 +51,6 @@ def next_state(state, action, exit_state, Maze):
         reward = 0
     return new_state,reward
 
-# def generate_episode(init_state,actions,Maze,exit_state,itermax=1000) :
-#      #from init_state to exit_state in maze M
-#      # list of (state, action, reward, next_state)
-#      i=0
-#      current_state = np.copy(init_state)
-#      episode = list()
-#      while  i < itermax and not all(current_state == exit_state)  :      
-#          current_actions = get_actions(current_state,actions) # define available movements
-#          action = current_actions[np.random.randint(len(current_actions))] # choose a random move (uniform policy)
-#          new_state, reward= next_state(current_state, action, exit_state, Maze) # move
-#          #
-#          episode.append((current_state,action, reward, new_state)) #add movement to list
-#          #
-#          current_state = new_state 
-#          i=i+1
-#      return episode
-
-# def generate_episode(init_state, actions, Maze, exit_state, policy=None, itermax=1000):
-#     """
-#     Generates an episode given a policy (optional).
-#     If policy is None, uses uniform random actions.
-#     """
-#     i = 0
-#     current_state = np.copy(init_state)
-#     episode = []
-#     while i < itermax and not all(current_state == exit_state):
-#         possible_actions = get_actions(current_state, actions)
-#         if len(possible_actions) == 0:
-#             break
-#         if policy is None or tuple(current_state) not in policy:
-#             # Uniform random policy
-#             action = possible_actions[np.random.randint(len(possible_actions))]
-#         else:
-#             # Follow given policy
-#             action = policy[tuple(current_state)]
-#             if action not in possible_actions:
-#                 action = possible_actions[np.random.randint(len(possible_actions))]
-#         new_state, reward = next_state(current_state, action, exit_state, Maze)
-#         episode.append((current_state, action, reward, new_state))
-#         current_state = new_state
-#         i += 1
-#     return episode
-
-
 def generate_episode(init_state, actions, Maze, exit_state, policy=None, epsilon=0.0, itermax=1000):
     """
     Generates an episode using a given (ε-soft) policy.
@@ -170,10 +126,7 @@ def MC_First_Visit(num_episodes, states, actions, Maze, exit_state, gamma=0.9):
 
 
 def MC_Exploring_Starts(num_episodes, states, actions, Maze, exit_state, gamma=0.9):
-    """
-    Monte Carlo Exploring Starts control method.
-    Returns the optimal policy and state-value function.
-    """
+
     Q = {(tuple(s), a): 0.0 for s in states for a in actions}
     returns = {(tuple(s), a): [] for s in states for a in actions}
     policy = {tuple(s): np.random.choice(actions) for s in states}
@@ -249,94 +202,16 @@ def MC_OnPolicy_FirstVisit_Control(num_episodes, states, actions, Maze, exit_sta
     V = {tuple(s): max([Q[(tuple(s), a)] for a in actions]) for s in states}
     return policy, V
 
-################## MAIN EXECUTION #############################
 
-# if __name__ == "__main__":
-#     app = App()
-#     app.mainloop()
-#     Maze = app.A
-
-#     plt.imshow(Maze, cmap='Blues')
-#     states, exit_state, init_states = get_states_from_Maze(Maze)
-#     plt.show()
-
-#     num_episodes = 5000
-
-#     # --- First Visit MC Prediction (uniform random policy) ---
-#     V_first_visit = MC_First_Visit(num_episodes, states, actions, Maze, exit_state, gamma=0.9)
-#     V_matrix_FV = np.zeros(Maze.shape)
-#     for s in states:
-#         V_matrix_FV[s[0], s[1]] = V_first_visit[tuple(s)]
-
-#     plt.figure()
-#     plt.title("State Value Function (First-Visit MC Prediction)")
-#     plt.imshow(V_matrix_FV, cmap='viridis')
-#     plt.colorbar()
-#     plt.show()
-
-#     # --- Monte Carlo Exploring Starts Control ---
-#     policy_ES, V_ES = MC_Exploring_Starts(num_episodes, states, actions, Maze, exit_state, gamma=0.9)
-#     V_matrix_ES = np.zeros(Maze.shape)
-#     for s in states:
-#         V_matrix_ES[s[0], s[1]] = V_ES[tuple(s)]
-
-#     plt.figure()
-#     plt.title("State Value Function (Monte Carlo Exploring Starts)")
-#     plt.imshow(V_matrix_ES, cmap='plasma')
-#     plt.colorbar()
-#     plt.show()
-
-#     # --- Compare Results ---
-#     diff_matrix = np.abs(V_matrix_ES - V_matrix_FV)
-#     plt.figure()
-#     plt.title("Difference Between MC-ES and First-Visit MC")
-#     plt.imshow(diff_matrix, cmap='coolwarm')
-#     plt.colorbar()
-#     plt.show()
-
-
-# if 1 :
-#     app = App()
-#     app.mainloop()
-#     Maze=app.A
-
-# plt.imshow(Maze,cmap='Blues')
-# states,exit_state,init_states = get_states_from_Maze(Maze)
-# plt.show()
-
-# init_state = init_states[np.random.randint(len(init_states))]
-# episode = generate_episode(init_state,actions,Maze,exit_state, itermax=100*len(states))
-
-# num_episodes = 5000
-# V = MC_First_Visit(num_episodes, states, actions, Maze, exit_state, gamma=0.9)
-
-# # Convert V to array for visualization
-# V_matrix = np.zeros(Maze.shape)
-# for s in states:
-#     V_matrix[s[0], s[1]] = V[tuple(s)]
-
-# plt.figure()
-# plt.title("State Value Function (First-Visit MC Prediction)")
-# plt.imshow(V_matrix, cmap='viridis')
-# plt.colorbar()
-# plt.show()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+def Temporal_Difference(states, actions, Maze, exit_state):
+    V = {tuple(s): 0.0 for s in states}
+    
+    for it in range(num_episodes):
+        init_state = init_states[np.random.randint(len(init_states))]
+        episode = generate_episode(init_state,actions,Maze,exit_state, itermax=100*len(states))
+        # print(episode)
+        states_in_episode = [tuple(x[0]) for x in episode]
+    
 
 ################## MAIN EXECUTION #############################
 

@@ -4,6 +4,7 @@ ML Sequence/3-TP-Neuro-HMM Etudiant/MNIST_5digitsDifficile.pkl
 ML Sequence/4-TP-CTC/MNIST_5digitsDifficile.pkl
 ML Sequence/TP5-Transformer/MNIST_5digitsDifficile.pkl
 */MNIST_5digitsDifficile.pkl
+./ML Graph/TP_GNN_challenge_M2/dataset/
 
 # Environments
 venv/

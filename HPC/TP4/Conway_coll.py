@@ -11,70 +11,59 @@ rank = comm.Get_rank()
 size = comm.Get_size()
 
 def idim_local(grid):
-    """
-    Retorna (start, end) com end exclusivo -> slice grid[start:end, :]
-    Distribui as linhas de forma equilibrada; primeiros 'remainder' ranks recebem uma linha extra.
-    """
-    nrows = grid.shape[0]
-    base = nrows // size
-    rem = nrows % size
+    irange, jrange = grid.shape
+    base = irange // size
+    rest = irange % size
 
-    if rank < rem:
-        local_n = base + 1
-        start = rank * local_n
-    else:
-        local_n = base
-        start = rem * (base + 1) + (rank - rem) * base
-
-    end = start + local_n
-    return start, end
+    # start index for this rank
+    start = rank * base + min(rank, rest)
+    # number of rows for this rank
+    nrows = base + (1 if rank < rest else 0)
+    end = start + nrows
+    return int(start), int(end)
 
 def create_local_grid_coll(grid):
     """
     Create local grid with ghost cells using collective communication (MPI_Sendrecv)
     """
-    init, fin = idim_local(grid)
-    
-    # Extract local subgrid without ghost cells
-    local_subgrid = grid[init:fin+1, :]
+    start, end = idim_local(grid)
+
+    # slice using end as exclusive
+    if end <= start:  # this rank has zero rows
+        ncols = grid.shape[1]
+        # Return a minimal ghostgrid (2 rows for top/bottom ghosts + 2 cols for padding)
+        return np.zeros((2, ncols + 2), dtype=grid.dtype)
+
+    local_subgrid = grid[start:end, :]
     local_nrows, ncols = local_subgrid.shape
-    
+
     # Create enlarged grid with ghost cells
     ghostgrid = conway.enlarge_grid(local_subgrid)
-    
-    # Determine neighbor ranks
+
+    # neighbor ranks
     up = rank - 1
     down = rank + 1
-    
-    # Prepare send and receive buffers
-    send_top = local_subgrid[0, :].copy() if up >= 0 else None
-    send_bottom = local_subgrid[-1, :].copy() if down < size else None
-    
-    recv_top = np.empty(ncols, dtype=local_subgrid.dtype) if up >= 0 else None
-    recv_bottom = np.empty(ncols, dtype=local_subgrid.dtype) if down < size else None
-    
-    # Use Sendrecv for non-blocking communication that avoids deadlocks
-    # Send bottom row, receive top ghost row
-    if down < size and up >= 0:
-        comm.Sendrecv(send_bottom, dest=down, recvbuf=recv_top, source=up)
-    elif down < size:
-        comm.Send(send_bottom, dest=down)
-    elif up >= 0:
-        comm.Recv(recv_top, source=up)
-    
-    # Send top row, receive bottom ghost row  
-    if up >= 0 and down < size:
-        comm.Sendrecv(send_top, dest=up, recvbuf=recv_bottom, source=down)
-    elif up >= 0:
-        comm.Send(send_top, dest=up)
-    elif down < size:
-        comm.Recv(recv_bottom, source=down)
-    
-    # Fill ghost zones
-    if recv_top is not None:
-        ghostgrid[0, 1:-1] = recv_top
-    if recv_bottom is not None:
-        ghostgrid[-1, 1:-1] = recv_bottom
+
+    # Prepare send/recv buffers for each neighbor (only if neighbor exists)
+    if up >= 0:
+        send_top = local_subgrid[0, :].copy()
+        recv_top = np.empty_like(send_top)
+        # exchange with up: send our top to up, receive up's bottom into recv_top
+        comm.Sendrecv(send_top, dest=up, recvbuf=recv_top, source=up)
+    else:
+        recv_top = np.zeros(ncols, dtype=local_subgrid.dtype)
+
+    if down < size:
+        send_bottom = local_subgrid[-1, :].copy()
+        recv_bottom = np.empty_like(send_bottom)
+        # exchange with down: send our bottom to down, receive down's top into recv_bottom
+        comm.Sendrecv(send_bottom, dest=down, recvbuf=recv_bottom, source=down)
+    else:
+        recv_bottom = np.zeros(ncols, dtype=local_subgrid.dtype)
+
+    # Fill ghost zones (skip the corner columns)
+    ghostgrid[0, 1:-1] = recv_top
+    ghostgrid[-1, 1:-1] = recv_bottom
         
     return ghostgrid
 
@@ -83,18 +72,14 @@ def conway_coll(grid, epochs):
     Conway's Game of Life using collective communications for ghost cell exchange
     """
     total_start = MPI.Wtime()
-    
-    comm = MPI.COMM_WORLD
-    rank = comm.Get_rank()
-    size = comm.Get_size()
 
     for ep in range(epochs):
-        # Each process creates its local grid with ghost cells using collective communication
+        # Each process creates its local grid with ghost cells
         local_grid = create_local_grid_coll(grid)
-        
-        # Apply life step locally
+
+        # Apply life step locally (operate on enlarged grid)
         egrid = conway.life_step(local_grid)
-        
+
         # Remove ghost cells
         local_result = egrid[1:-1, 1:-1]
 
@@ -103,10 +88,12 @@ def conway_coll(grid, epochs):
 
         if rank == 0:
             # Reconstruct global grid for next epoch
+            # gathered is a list of arrays (some arrays may be shape (0,ncols))
             grid = np.vstack(gathered)
 
-    # Broadcast final grid to all processes
-    grid = comm.bcast(grid if rank == 0 else None, root=0)
+        # Broadcast updated grid to all ranks so next epoch uses the new grid
+        grid = comm.bcast(grid if rank == 0 else None, root=0)
+
     total_end = MPI.Wtime()
     return grid, total_end - total_start
         
