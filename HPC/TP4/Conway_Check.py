@@ -13,7 +13,7 @@ if __name__ == '__main__':
     
     if rank == 0:
         # grid = read_grid('jdv_1M.grid')
-        grid = base.init_grid((5, 5), threshold=0.4)
+        grid = base.init_grid((50, 50), threshold=0.4)
         res = base.conway(grid, 5)
     else:
         grid = None

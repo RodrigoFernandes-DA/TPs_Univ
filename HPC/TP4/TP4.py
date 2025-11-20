@@ -231,14 +231,17 @@ def conway_coll(grid, n):
 
 def conway_block(grid, n):
     total_start = MPI.Wtime()
+    
     (i_start, i_end), (j_start, j_end) = idim_local_blocks(grid.shape, coords)
     
     for ep in range(n):
+        
+        # 1) Domaine local + grille locale élargie
         local = grid[i_start:i_end, j_start:j_end]
         local_e_grid = create_local_grid_2d(grid, i_start, i_end, j_start, j_end)
         ni, nj = local.shape
 
-        # vertical exchange (up / down)
+        # 2) vertical exchange (up / down)
         if nbr_up != MPI.PROC_NULL:
             send_up = local[0, :].copy()
             recv_up = np.empty_like(send_up)
@@ -256,7 +259,7 @@ def conway_block(grid, n):
         local_e_grid[0, 1:-1] = recv_up
         local_e_grid[-1, 1:-1] = recv_down
 
-        # horizontal exchange (left / right)
+        # 3) horizontal exchange (left / right)
         if nbr_left != MPI.PROC_NULL:
             send_left = local[:, 0].copy()
             recv_left = np.empty_like(send_left)
@@ -274,9 +277,7 @@ def conway_block(grid, n):
         local_e_grid[1:-1, 0] = recv_left
         local_e_grid[1:-1, -1] = recv_right
         
-        # 5) STATISTIQUES (AVANT OU APRÈS life_step, mais toujours comme conway)
-        # ⚠ très important : on ne somme que les cellules RÉELLES,
-        # pas les fantômes, sinon on double-compte les bords.
+        # 4) STATISTIQUES 
         alive_local = np.sum(
             local_e_grid[1:i_end-i_start + 1, 1:j_end-j_start + 1]
         )
@@ -288,11 +289,11 @@ def conway_block(grid, n):
             print(f"alive cells: {alive_global}: "
                   f"{alive_global / grid.size * 100:2.2f}%")
 
-        # life_step expects an enlarged grid
+        # 5) Une étape du jeu de la vie en local
         egrid = conway.life_step(local_e_grid)
         local_result = egrid[1:-1, 1:-1]  # remove ghosts
 
-        # Gather pairs of (coords, local_result) on rank 0
+        # 6) Gather pairs of (coords, local_result) on rank 0
         gathered = comm.gather((coords, local_result), root=0)
 
         if rank == 0:
