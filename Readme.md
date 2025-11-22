@@ -5,10 +5,10 @@ cd /home/ENT-UR/AUTOFS/STUDENTS/coelhrod/Git
 cd "/home/ENT-UR/AUTOFS/STUDENTS/coelhrod/Git/ML Sequence/4-TP-CTC"
 
 #### Apagar do historico
-git filter-branch --force --index-filter "git rm --cached --ignore-unmatch 'ML Sequence/3-TP-Neuro-HMM Etudiant/MNIST_5digitsDifficile.pkl'" --prune-empty --tag-name-filter cat -- --all
+git filter-branch --force --index-filter "git rm --cached --ignore-unmatch 'ML Graph/TP_GNN_challenge_M2/dataset/ZFR/processed/data_train.pt'" --prune-empty --tag-name-filter cat -- --all
 
 #### Varificar se apagou
-git log --all -- ML\ Sequence/3-TP-Neuro-HMM\ Etudiant/MNIST_5digitsDifficile.pkl
+git log --all -- "ML Graph/TP_GNN_challenge_M2/dataset/ZFR/processed/data_train.pt"
 
 #### Senao, limpar do cache
 rm -rf .git/refs/original/

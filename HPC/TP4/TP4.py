@@ -10,7 +10,7 @@ size = comm.Get_size()
 
 # Create a 2D Cartesian communicator (auto-decompose into near-square grid)
 dims = MPI.Compute_dims(size, 2)  # e.g., for 4 ranks -> [2,2]
-cart_comm = comm.Create_cart(dims, periods=[False, False], reorder=True)
+cart_comm = comm.Create_cart(dims, periods=[False, False], reorder=False)
 coords = cart_comm.Get_coords(rank)         # (proc_row, proc_col)
 nbr_up, nbr_down = cart_comm.Shift(0, 1)    # vertical neighbors
 nbr_left, nbr_right = cart_comm.Shift(1, 1) # horizontal neighbors
