@@ -92,10 +92,18 @@ class PositionalEncoding2D(nn.Module):
 
         self.register_buffer("pos_encoding2D",pos_encoding2D)
         
+    # def forward(self, token_embedding: torch.tensor) -> torch.tensor:
+    #     # Residual connection + pos encoding
+    #     # on suppose des images touets de même dimension, donc 
+    #     return self.dropout(token_embedding + self.pos_encoding2D)
+    
     def forward(self, token_embedding: torch.tensor) -> torch.tensor:
-        # Residual connection + pos encoding
-        # on suppose des images touets de même dimension, donc 
-        return self.dropout(token_embedding + self.pos_encoding2D)
+        # token_embedding shape = (batch, seq_len, dim_model)
+        seq_len = token_embedding.size(1)
+        # slice pos_encoding2D in case it was precomputed with a larger max_len
+        pos_enc = self.pos_encoding2D[:, :seq_len, :]  # (1, seq_len, dim_model)
+        return self.dropout(token_embedding + pos_enc)
+
     
 ###########################################################
 class Transformer(nn.Module):

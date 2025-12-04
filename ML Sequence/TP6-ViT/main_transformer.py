@@ -165,7 +165,8 @@ if __name__ == '__main__':
         'END_TOKEN':13,
     }
     #data_file = 'MNIST_5digits2DHorizontal.pkl' #'MNIST_5digits2DVertical.pkl' #'MNIST_5digits2D.pkl'
-    data_file = 'MNIST_5digits2DHorizontalFacile.pkl'
+    # data_file = 'MNIST_5digits2DHorizontalFacile.pkl'
+    data_file = '/content/drive/MyDrive/USB/MNIST_5digitsDifficile.pkl'
     x_train,x_test,y_train,y_test = Load_MNISTSequences(data_file,config)
     N_train = len(y_train)
 
