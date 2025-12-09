@@ -27,7 +27,8 @@ from torch.utils.data import Dataset, DataLoader
 # #!cd /content/drive/MyDrive/ColabNotebooks
 # sys.path.append('/content/drive/MyDrive/ColabNotebooks')
 
-import TRANSFORMER
+import TRANSFORMER_5 as TRANSFORMER
+import math
 
 def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -108,18 +109,38 @@ def SlidingWindow(x,w_width,stride):
   return torch.from_numpy(np.float32(feature/norm))
 ##############################################################################
 # extraction d'une fenetre glissante sur les images d'entrée
-def Apply_SlidingWindow(x,w_width,stride,SHOW=False):
-    xx=[]
-    for n in range(len(x)):
-        xx = xx + [SlidingWindow(x[n],w_width,stride)]
-    if SHOW:
-        for i in range(5):
-            plt.imshow(x[i].numpy(), cmap='gray')
-            plt.show()
-            plt.imshow(xx[i].numpy(), cmap='gray')
-            plt.show()
+def Apply_SlidingWindow(x, w_width, stride, SHOW=False):
+    """
+    Modified to keep full images for CNN or use sliding window for linear embedding
+    """
+    if config['use_cnn']:
+        # For CNN: keep full images
+        xx = []
+        for n in range(len(x)):
+            # Reshape to (seq_len, 28, 28) - full images
+            seq_len = x[n].shape[0]
+            img_size = int(math.sqrt(x[n].shape[1]))  # Assuming square images
+            xx.append(x[n].view(seq_len, img_size, img_size))
+        return xx
+    else:
+        # Original sliding window for linear embedding
+        xx = []
+        for n in range(len(x)):
+            xx = xx + [SlidingWindow(x[n], w_width, stride)]
+        return xx
+    
+# def Apply_SlidingWindow(x,w_width,stride,SHOW=False):
+#     xx=[]
+#     for n in range(len(x)):
+#         xx = xx + [SlidingWindow(x[n],w_width,stride)]
+#     if SHOW:
+#         for i in range(5):
+#             plt.imshow(x[i].numpy(), cmap='gray')
+#             plt.show()
+#             plt.imshow(xx[i].numpy(), cmap='gray')
+#             plt.show()
 
-    return xx
+#     return xx
 #######################################
 if __name__ == '__main__':
 
@@ -151,6 +172,7 @@ if __name__ == '__main__':
         'max_length':140,
         'START_TOKEN':10,
         'END_TOKEN':11,
+        'use_cnn': True,
     }
 
     x_train,x_test,y_train,y_test = Load_MNISTSequences('MNIST_5digitsDifficile.pkl')
@@ -211,7 +233,8 @@ if __name__ == '__main__':
         ############################################################
         # apprentissage from scratch
         if not REPRISE:
-            my_transformer = TRANSFORMER.Transformer(config,device).to(device)
+            # my_transformer = TRANSFORMER.Transformer(config,device).to(device)
+            my_transformer = TRANSFORMER.HybridCNNTransformer(config, device).to(device)
         else:
             # reprise de l'apprentissage 
             my_transformer = TRANSFORMER.Transformer(config,device)
