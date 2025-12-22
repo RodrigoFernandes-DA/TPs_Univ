@@ -1,0 +1,15 @@
+# snake_game.py
+Environnement gym
+
+# snake_algos.py
+To run and visualize one single algorithm at a time
+Algorithm defined in line 598
+
+
+# snake_search.py
+Evaluate diferente combinations of hyperparameters for a algorithm
+Algorithm defined in line 246
+
+# snake_compare
+Compare all algorithms 
+Hyperparameters difined in line 68

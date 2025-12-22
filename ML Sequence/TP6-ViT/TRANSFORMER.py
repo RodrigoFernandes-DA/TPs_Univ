@@ -104,7 +104,42 @@ class PositionalEncoding2D(nn.Module):
         pos_enc = self.pos_encoding2D[:, :seq_len, :]  # (1, seq_len, dim_model)
         return self.dropout(token_embedding + pos_enc)
 
-    
+
+class CNNPatchEncoder(nn.Module):
+    """
+    Encodes each image patch (w_width x w_width) using a small CNN
+    """
+    def __init__(self, patch_size, out_dim):
+        super().__init__()
+
+        self.patch_size = patch_size
+
+        self.cnn = nn.Sequential(
+            nn.Conv2d(1, 32, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(32, 64, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.AdaptiveAvgPool2d((1, 1))  # global pooling
+        )
+
+        self.proj = nn.Linear(64, out_dim)
+
+    def forward(self, x):
+        """
+        x: (batch, seq_len, patch_dim)
+        patch_dim = patch_size * patch_size
+        """
+        B, S, D = x.shape
+
+        x = x.view(B * S, 1, self.patch_size, self.patch_size)
+        x = self.cnn(x)                      # (B*S, 64, 1, 1)
+        x = x.view(B * S, 64)
+        x = self.proj(x)                     # (B*S, out_dim)
+        x = x.view(B, S, -1)
+
+        return x
+
+  
 ###########################################################
 class Transformer(nn.Module):
     def __init__(self, config,device):
@@ -133,7 +168,13 @@ class Transformer(nn.Module):
                                                             dropout_p = self.dropout, 
                                                             max_len = self.max_length)
         
-        self.x_embedding = nn.Linear(config['input_features'],config['hidden_size'])        
+        self.patch_size = int(math.sqrt(config['input_features']))
+
+        self.cnn_patch_encoder = CNNPatchEncoder(
+            patch_size=self.patch_size,
+            out_dim=config['hidden_size']
+        )
+      
         
         self.y_embedding = nn.Embedding(config['num_classes'],config['hidden_size'])         
         
@@ -151,9 +192,9 @@ class Transformer(nn.Module):
 
         # Embedding + positional encoding - Out size = (batch_size, sequence length, dim_model)
         #x = self.x_embedding(x) * math.sqrt(self.hidden_size)
-        x = self.x_embedding(x)
-
+        x = self.cnn_patch_encoder(x)
         x = self.positional_encoding_layer2D(x)
+
         
         y = self.y_embedding(y) * math.sqrt(self.hidden_size)
         y = self.positional_encoding_layer(y)
@@ -183,82 +224,89 @@ class Transformer(nn.Module):
         return mask
 
 #########################################################
-def train_loop(dataloader, model, loss_fn, optimizer):
-    size = len(dataloader.dataset)
+def train_loop(dataloader, model, loss_fn, optimizer): 
     nb_batches = len(dataloader)
-    epoch_loss = 0
-    
+    epoch_loss = 0.0
     model.train()
-    
-    for batch, (X, y,X_l,y_l) in enumerate(dataloader):
-        
-        X = X.to(model.DEVICE)
-        y = y.to(model.DEVICE)
 
-        y_input = y[:,:-1] 
-        y_output = y[:,1:] 
+    # AMP: scaler for stable mixed-precision training on CUDA
+    use_amp = (model.DEVICE is not None) and (str(model.DEVICE).startswith("cuda")) 
+    scaler = torch.cuda.amp.GradScaler(enabled=use_amp)
+
+    for batch, (x, y, X_1, y_1) in enumerate(dataloader):
+        X = X.to(model.DEVICE, non_blocking=True)
+        y = y.to(model.DEVICE, non_blocking=True)
         
-        l = y_input.size(1) # la longueur maximale d'un élément du batch
+        y_input = y[:, :-1] 
+        y_output = y[:, 1:]
+        
+        l = y_input.size(1)
         y_output_mask = model.get_tgt_mask(l).to(model.DEVICE)
         
-        x_padding_mask = (X[:,:,0] == model.x_pad_idx).to(model.DEVICE)
+        x_padding_mask = (X[:, :, 0] == model.x_pad_idx).to(model.DEVICE) 
         y_input_padding_mask = (y_input == model.y_pad_idx).to(model.DEVICE)
         
-        # Compute prediction and loss
-        pred = model(X.float(), y_input,
-                     y_output_mask,
-                     x_padding_mask, 
-                     y_input_padding_mask) #tgt_is_causal = True)
-        pred = pred.permute(1, 2, 0) 
-        y_output = y_output.permute(1, 0) 
-
-        loss = loss_fn(pred, y_output)
-        epoch_loss += loss.item()
+        optimizer.zero_grad(set_to_none=True)
         
-        # Backpropagation
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-    #print("\nTraining loss:",epoch_loss / nb_batches)
-    return epoch_loss / nb_batches
+        # AMP autocast: forward + loss in mixed precision
+        with torch.cuda.amp.autocast(enabled=use_amp):
+            pred = model(
+                X.float(), y_input,
+                y_output_mask,
+                x_padding_mask,
+                y_input_padding_mask
+            )
+            
+            # Keep your exact loss shaping
+            pred = pred.permute(1, 2, 0) 
+            y_output_t = y_output.permute(1, 0)
+            
+            loss = loss_fn(pred, y_output_t)
+            
+            epoch_loss += float(loss.item())
+            
+            # AMP backward + optimizer step 
+            scaler.scale(loss).backward()
+            scaler.step(optimizer)
+            scaler.update()
+            
+    return epoch_loss/nb_batches
 
 #########################################################
 def valid_loop(dataloader, model, loss_fn):
-
-    size = len(list(dataloader.dataset))
     nb_batches = len(dataloader)
-    valid_loss = 0
-    
+    valid_loss = 0.0
+
+    use_amp = (model.DEVICE is not None) and str(model.DEVICE).startswith("cuda")
+    model.eval()
+
     with torch.no_grad():
-        for batch, (X, y,X_l,y_l) in enumerate(dataloader):
-            
-            X = X.to(model.DEVICE)
-            y = y.to(model.DEVICE)
-            
-            y_input = y[:,:-1] 
-            y_output = y[:,1:] 
-            
-            l = y_input.size(1) # la longueur maximale d'un élément du batch
+        for X, y, _, _ in dataloader:
+            X = X.to(model.DEVICE, non_blocking=True)
+            y = y.to(model.DEVICE, non_blocking=True)
+
+            y_input = y[:, :-1]
+            y_output = y[:, 1:]
+
+            l = y_input.size(1)
             y_output_mask = model.get_tgt_mask(l).to(model.DEVICE)
-             
-            x_padding_mask = (X[:,:,0] == model.x_pad_idx).to(model.DEVICE)
-            y_input_padding_mask = (y_input == model.y_pad_idx).to(model.DEVICE)
-            
-            # Compute prediction and loss
-            pred = model(X.float(),y_input,
-                         y_output_mask,
-                         x_padding_mask,
-                         tgt_key_padding_mask = y_input_padding_mask)
-            
-            pred = pred.permute(1, 2, 0)      
-            y_output = y_output.permute(1, 0) 
-            
-            loss = loss_fn(pred, y_output)
-            valid_loss += loss.item()
-    
-    valid_loss /= nb_batches
-    
-    return valid_loss
 
+            x_padding_mask = (X[:, :, 0] == model.x_pad_idx)
+            y_input_padding_mask = (y_input == model.y_pad_idx)
 
+            with torch.cuda.amp.autocast(enabled=use_amp):
+                pred = model(
+                    X.float(), y_input,
+                    y_output_mask,
+                    x_padding_mask,
+                    y_input_padding_mask
+                )
 
+                pred = pred.permute(1, 2, 0)
+                y_output_t = y_output.permute(1, 0)
+
+                loss = loss_fn(pred, y_output_t)
+
+            valid_loss += float(loss.item())
+
+    return valid_loss / nb_batches
