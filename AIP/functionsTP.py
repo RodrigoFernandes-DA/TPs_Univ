@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 from skimage.metrics import mean_squared_error, peak_signal_noise_ratio, structural_similarity
 from skimage.io import imread
 import scipy.ndimage as ndimage
-# import skimage.filter as filt
+from scipy.spatial.distance import directed_hausdorff
 
 
 ######## PART 1 - IMAGE DENOISING ###############
@@ -71,7 +71,6 @@ def isotropic_diffusion(image, num_iterations=100, eta=0.1):
     return u
 
 
-
 def anisotropic_diffusion(image, num_iterations=15, eta=0.25, K=15):
     """
     Perona-Malik Anisotropic Diffusion (2D)
@@ -115,178 +114,196 @@ def anisotropic_diffusion(image, num_iterations=15, eta=0.25, K=15):
 
 ######## PART 2 - IMAGE SEGMENTATION ###############
 
-
-"""
-Greedy Deformable Contour (Snakes) implementation in Python.
-
-Usage:
-  - Provide image_path and initial_points (Nx2 array).
-  - Call greedy_snake(...)
-  - The function returns final_points and some diagnostics and plots the result.
-
-This implementation depends on:
-  numpy, scipy, opencv (cv2), matplotlib
-
-If you don't have an initial contour, set init_from='circle' to auto-generate one.
-"""
-
-
 def image_external_energy(img_gray, w_line=0.0, w_edge=1.0, sigma=1.0):
     """
-    Compute external energy:
-       E_ext = w_line * I  - w_edge * |grad( G_sigma * I )|
-    Returns normalized energy (lower is more attractive).
+    Compute external energy where edges have LOWEST values.
+    This is CRITICAL: The snake moves toward LOWEST energy points.
     """
     img = img_gray.astype(np.float32)
-    # optional smoothing
+    
+    # Smooth the image
     smooth = ndimage.gaussian_filter(img, sigma=sigma)
-    # line: intensity itself
+    
+    # Line term: intensity itself (optional)
     E_line = smooth
-    # edge: gradient magnitude
+    
+    # Edge term: gradient magnitude (edges have HIGH gradient)
     gy, gx = np.gradient(smooth)
     E_edge = np.hypot(gx, gy)
+    
+    # Combine: we want edges to be LOW energy valleys
+    # So subtract edge magnitude (edges = valleys)
     E = w_line * E_line - w_edge * E_edge
-    # normalize to [0,1]
-    E = (E - E.min()) / (E.max() - E.min() + 1e-12)
-    return E
-
+    
+    # Normalize to [0, 1]
+    E_min, E_max = E.min(), E.max()
+    if E_max - E_min > 1e-12:
+        E_normalized = (E - E_min) / (E_max - E_min)
+    else:
+        E_normalized = np.zeros_like(E)
+    
+    return E_normalized
 
 def curvature_at_points(pts):
     """
-    Discrete curvature magnitude (squared second derivative)
-    pts: (N,2)
-    returns: curv (N,)
+    Compute curvature magnitude.
     """
     N = len(pts)
     prev = np.roll(pts, 1, axis=0)
     nxt = np.roll(pts, -1, axis=0)
-    # second difference vector
     d2 = prev - 2 * pts + nxt
     curv = np.sqrt((d2 ** 2).sum(axis=1))
     return curv
 
-
 def greedy_snake(img, init_pts,
-                 alpha=0.1,  # elasticity (continuity)
-                 beta=0.4,   # global stiffness (will allow per-point beta_j)
-                 gamma=1.0,  # weight of external energy
+                 alpha=0.1,   # continuity weight (keep points evenly spaced)
+                 beta=0.4,    # curvature weight (smoothness)
+                 gamma=1.0,   # external energy weight - CRITICAL
                  w_line=0.0,
                  w_edge=1.0,
                  sigma=1.0,
-                 M=7,       # search window size (MxM)
-                 max_iter=250,
-                 move_fraction_tol=0.01,  # stop when fraction moved < this
-                 corner_thresh_rel=0.6,   # relative threshold for corner detection
-                 shrink_M_if_stable=True,
-                 min_M=3,
+                 M=9,        # search window size
+                 max_iter=200,
+                 move_fraction_tol=0.01,
                  verbose=True):
     """
-    Greedy snake algorithm.
-
-    img: grayscale image (H,W) array
-    init_pts: (N,2) float array of initial snake points (x,y)
-    returns: final_pts, history
+    Simplified and corrected greedy snake algorithm.
+    Key fixes:
+    1. Proper energy normalization
+    2. Correct continuity energy computation
+    3. Fixed point update logic
     """
-
-    img_gray = img.astype(np.float32)
-    H, W = img_gray.shape
-
-    E_ext = image_external_energy(img_gray, w_line=w_line, w_edge=w_edge, sigma=sigma)
-    # For fast lookup:
-    ext_interp = E_ext  # we'll index nearest-pixel positions (neighborhood small)
-
+    
+    H, W = img.shape[:2]
+    
+    # Compute external energy map (edges = low values)
+    E_ext = image_external_energy(img, w_line=w_line, w_edge=w_edge, sigma=sigma)
+    
+    # Initialize snake
     pts = init_pts.copy().astype(np.float32)
     N = len(pts)
-
-    # initial per-point beta_j
-    beta_j = np.ones(N, dtype=np.float32) * beta
-
-    # Precompute neighbor offsets for the MxM grid centered at 0
+    
+    # Store average distance between points (for continuity)
+    avg_dist = np.mean([np.linalg.norm(pts[i] - pts[(i+1)%N]) 
+                       for i in range(N)])
+    
+    # Precompute neighborhood offsets
     half = M // 2
-    offsets = [(dx, dy) for dy in range(-half, half + 1) for dx in range(-half, half + 1)]
-
-    history = {'moved_fraction': [], 'M': [], 'curv_max': []}
-
-    for it in range(max_iter):
+    offsets = []
+    for dy in range(-half, half + 1):
+        for dx in range(-half, half + 1):
+            offsets.append((dx, dy))
+    
+    # Sort by distance from center for better performance
+    offsets.sort(key=lambda x: abs(x[0]) + abs(x[1]))
+    
+    history = {'moved_fraction': [], 'energy': []}
+    
+    for iteration in range(max_iter):
         moved = np.zeros(N, dtype=bool)
-        # compute curvature and detect corners: local maxima in curvature
-        curv = curvature_at_points(pts)
-        # local maxima check
-        is_local_max = (curv > np.roll(curv, 1)) & (curv > np.roll(curv, -1))
-        if curv.max() > 0:
-            corner_thresh = corner_thresh_rel * curv.max()
-        else:
-            corner_thresh = 0.0
-        corner_mask = is_local_max & (curv >= corner_thresh)
-        # set beta_j = 0 at corners (so stiffness doesn't smooth corners away)
-        beta_j = np.where(corner_mask, 0.0, beta)
-
-        # For each point i, search neighborhood
+        total_energy = 0
+        
+        # Make a copy of current points
+        new_pts = pts.copy()
+        
         for i in range(N):
-            pi = pts[i]
-            pprev = pts[(i - 1) % N]
-            pnext = pts[(i + 1) % N]
-
-            best_E = 1e12
-            best_p = pi.copy()
-
-            # If M is small, create offsets accordingly
+            current_pt = pts[i]
+            prev_pt = pts[(i-1) % N]
+            next_pt = pts[(i+1) % N]
+            
+            best_energy = float('inf')
+            best_candidate = current_pt
+            
+            # Search in neighborhood
             for dx, dy in offsets:
-                candidate = np.array([pi[0] + dx, pi[1] + dy], dtype=np.float32)
-                x, y = candidate
-                # check boundaries (keep inside image bounds)
-                if x < 0 or x >= W or y < 0 or y >= H:
+                candidate = np.array([current_pt[0] + dx, current_pt[1] + dy])
+                
+                # Boundary check
+                if (candidate[0] < 0 or candidate[0] >= W or 
+                    candidate[1] < 0 or candidate[1] >= H):
                     continue
-
-                # Internal energy: continuity (elasticity)
-                E_cont = np.sum((candidate - pprev) ** 2)
-
-                # Curvature energy: squared second difference magnitude
-                E_curv = np.sum((pprev - 2 * candidate + pnext) ** 2)
-
-                # External energy: image energy at nearest pixel
-                ix = int(round(x))
-                iy = int(round(y))
-                # guard
-                ix = min(max(ix, 0), W - 1)
-                iy = min(max(iy, 0), H - 1)
-                E_image = ext_interp[iy, ix]
-
-                # Total energy
-                E = alpha * E_cont + beta_j[i] * E_curv + gamma * E_image
-
-                if E < best_E:
-                    best_E = E
-                    best_p = candidate
-
-            # Move point if improved
-            if np.linalg.norm(best_p - pi) >= 1e-3:
-                pts[i] = best_p
+                
+                # === COMPUTE ENERGIES ===
+                
+                # 1. Continuity energy: encourage equal spacing
+                dist_to_prev = np.linalg.norm(candidate - prev_pt)
+                E_cont = (dist_to_prev - avg_dist) ** 2
+                
+                # 2. Curvature energy: discourage sharp bends
+                # Second derivative approximation
+                curvature_vec = prev_pt - 2*candidate + next_pt
+                E_curv = np.sum(curvature_vec ** 2)
+                
+                # 3. External energy: sample from energy map
+                # Use bilinear interpolation for smoother sampling
+                x, y = candidate
+                x0, y0 = int(np.floor(x)), int(np.floor(y))
+                x1, y1 = min(x0 + 1, W - 1), min(y0 + 1, H - 1)
+                
+                # Bilinear interpolation weights
+                wx = x - x0
+                wy = y - y0
+                
+                # Get 4 neighboring energy values
+                E00 = E_ext[y0, x0]
+                E01 = E_ext[y1, x0]
+                E10 = E_ext[y0, x1]
+                E11 = E_ext[y1, x1]
+                
+                # Interpolated external energy
+                E_img = (1-wx)*(1-wy)*E00 + wx*(1-wy)*E10 + (1-wx)*wy*E01 + wx*wy*E11
+                
+                # 4. Balloon force (OUTWARD pressure) - CRITICAL to prevent shrinking
+                # Compute outward normal
+                tangent = next_pt - prev_pt
+                normal = np.array([-tangent[1], tangent[0]])
+                norm = np.linalg.norm(normal)
+                if norm > 0:
+                    normal = normal / norm
+                
+                # Outward pressure energy (negative = outward movement)
+                balloon_weight = 0.1  # Small outward push
+                E_balloon = -balloon_weight * np.dot(normal, candidate - current_pt)
+                
+                # Total energy (weighted sum)
+                E_total = (alpha * E_cont + 
+                          beta * E_curv + 
+                          gamma * E_img + 
+                          E_balloon)
+                
+                if E_total < best_energy:
+                    best_energy = E_total
+                    best_candidate = candidate
+            
+            # Update point if we found a better position
+            if not np.array_equal(best_candidate, current_pt):
+                new_pts[i] = best_candidate
                 moved[i] = True
-
-        frac_moved = moved.mean()
-        history['moved_fraction'].append(frac_moved)
-        history['M'].append(M)
-        history['curv_max'].append(curv.max())
-
-        if verbose:
-            print(f"iter {it+1:03d}: moved_frac={frac_moved:.4f}, M={M}, curv_max={curv.max():.4f}")
-
-        # optionally shrink M if stable
-        if shrink_M_if_stable and frac_moved < 0.02 and M > min_M:
-            # reduce search window to refine
-            M = max(min_M, M - 2)
-            half = M // 2
-            offsets = [(dx, dy) for dy in range(-half, half + 1) for dx in range(-half, half + 1)]
+                total_energy += best_energy
+        
+        # Update average distance for next iteration
+        if np.any(moved):
+            avg_dist = np.mean([np.linalg.norm(new_pts[i] - new_pts[(i+1)%N]) 
+                              for i in range(N)])
+        
+        # Calculate moved fraction
+        moved_fraction = np.mean(moved)
+        history['moved_fraction'].append(moved_fraction)
+        history['energy'].append(total_energy / N if N > 0 else 0)
+        
+        # Update points
+        pts = new_pts.copy()
+        
+        if verbose and iteration % 20 == 0:
+            print(f"Iter {iteration:3d}: Moved {moved_fraction:.3f}, "
+                  f"Avg energy {history['energy'][-1]:.4f}")
+        
+        # Check convergence
+        if moved_fraction < move_fraction_tol:
             if verbose:
-                print(f"  -> shrinking neighborhood to M={M}")
-
-        # stopping criterion
-        if frac_moved <= move_fraction_tol:
-            if verbose:
-                print(f"Converged at iteration {it+1}. moved_frac={frac_moved:.4f}")
+                print(f"Converged at iteration {iteration}")
             break
-
+    
     return pts, history, E_ext
 
 
@@ -313,3 +330,22 @@ def plot_snake(img, init_pts, final_pts, E_ext=None, title="Snake result"):
         plt.show()
 
 
+def dice_score(mask1, mask2):
+    """Compute Dice similarity coefficient between two binary masks"""
+    intersection = np.logical_and(mask1, mask2).sum()
+    if intersection == 0:
+        return 0.0
+    return (2. * intersection) / (mask1.sum() + mask2.sum())
+
+def create_mask_from_contour(contour, shape):
+    """Create a binary mask from a contour"""
+    mask = np.zeros(shape, dtype=np.uint8)
+    # Convert contour points to integer coordinates
+    contour_int = contour.astype(np.int32)
+    cv2.fillPoly(mask, [contour_int], 255)
+    return mask
+
+def hausdorff_distance(contour1, contour2):
+    """Compute Hausdorff distance between two contours"""
+    return max(directed_hausdorff(contour1, contour2)[0],
+               directed_hausdorff(contour2, contour1)[0])

@@ -601,7 +601,7 @@ if __name__ == "__main__":
         algorithm=algorithm_choice,
         alpha=0.1,        
         gamma=0.95,         
-        nb_episodes=1,   
+        nb_episodes=200,   
         itermax=400,       
         epsilon=0.1,        
         n=3                 

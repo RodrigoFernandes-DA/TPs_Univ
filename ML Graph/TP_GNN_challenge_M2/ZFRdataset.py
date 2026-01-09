@@ -5,17 +5,15 @@ import torch
 from torch_geometric.data import (InMemoryDataset)
 
 
-
-
 class ZFR(InMemoryDataset):
 
     def __init__(self, root,dataset = 'train', transform=None, pre_transform=None,
                  pre_filter=None):
         super(ZFR, self).__init__(root, transform, pre_transform, pre_filter)
         if dataset == 'train':
-            self.data, self.slices = torch.load(self.processed_paths[0])
+            self.data, self.slices = torch.load(self.processed_paths[0], weights_only=False)
         if dataset == 'test':
-            self.data, self.slices = torch.load(self.processed_paths[1])
+            self.data, self.slices = torch.load(self.processed_paths[1], weights_only=False)
 
         
 

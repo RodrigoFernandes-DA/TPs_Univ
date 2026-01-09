@@ -41,12 +41,18 @@ action_dir_map = {
 
 # Maps direction vector to a rotation angle for sprite drawing
 dir_map_to_angle = {
-    Point(0, -1): 0,    # up
-    Point(0, 1): 180,   # down
-    Point(-1, 0): -90,   # left
-    Point(1, 0): 90,   # right
+    Point(0, -1): 0,    # left
+    Point(0, 1): 180,   # right
+    Point(-1, 0): -90,   # up
+    Point(1, 0): 90,   # down
 }
 
+dir_map_to_angle_head = {
+    Point(0, -1): -90,    # left
+    Point(0, 1): 90,   # right
+    Point(-1, 0): 0,   # up
+    Point(1, 0): 180,   # down
+}
 
 class SnakeGameEnv(gym.Env):
     metadata = {
@@ -535,7 +541,7 @@ class SnakeGameEnv(gym.Env):
         if len(self.snake_segments) > 0:
             # Draw head with rotation based on direction
             head_pos = self.snake_segments[0]
-            rotation_angle = dir_map_to_angle.get(self.snake_direction, 0) -90
+            rotation_angle = dir_map_to_angle_head.get(self.snake_direction, 0)
             # Convert rotation angle to pygame rotation (clockwise)
             pygame_rotation = -rotation_angle  # Invert because pygame rotates clockwise
             draw_sprite(canvas, head_pos.x, head_pos.y, 'head', pygame_rotation)
