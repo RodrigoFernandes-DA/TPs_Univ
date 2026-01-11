@@ -12,10 +12,6 @@ class SnakeState(Enum):
     DED = 3
     WON = 4
 
-# Utility to rotate sprites by simple numpy operations
-# Only handles 90 / -90 / 180 rotations
-# cv2.rotate would work too, but this manual implementation is used
-
 def _rotate_image(cv_image, _rotation_angle):
     axes_order = (1, 0, 2) if len(cv_image.shape) == 3 else (1, 0)
     if _rotation_angle == -90:

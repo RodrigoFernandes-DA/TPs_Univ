@@ -99,7 +99,7 @@ class SnakeGameEnv(gym.Env):
         # Background color 
         self.COLOR_BG = (255, 211, 140)  
         self.COLOR_GRID = (80, 80, 80)  # Slightly lighter gray for grid
-        self.COLOR_TEXT = (240, 240, 240)
+        self.COLOR_TEXT = (0, 0, 0)
         
         # === Load sprites ===
         base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -107,11 +107,11 @@ class SnakeGameEnv(gym.Env):
         
         # Try to load sprites
         sprite_paths = {
-            'head': os.path.join(base_dir, "RL/Snake Game/codes/sprites/head.png"),
-            'body': os.path.join(base_dir, "RL/Snake Game/codes/sprites/body.png"),
-            'turn': os.path.join(base_dir, "RL/Snake Game/codes/sprites/turn.png"),
-            'fruit': os.path.join(base_dir, "RL/Snake Game/codes/sprites/fruit.png"),
-            'tail': os.path.join(base_dir, "RL/Snake Game/codes/sprites/tail.png"),
+            'head': os.path.join(base_dir, "sprites/head.png"),
+            'body': os.path.join(base_dir, "sprites/body.png"),
+            'turn': os.path.join(base_dir, "sprites/turn.png"),
+            'fruit': os.path.join(base_dir, "sprites/fruit.png"),
+            'tail': os.path.join(base_dir, "sprites/tail.png"),
         }
         
         # Fallback to local sprites directory
