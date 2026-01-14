@@ -60,7 +60,7 @@ class SnakeGameEnv(gym.Env):
         "render_fps": 20,
     }
 
-    def __init__(self, render_mode=None, n_channel=1, board_size=15, n_target=1, use_simplified_state=True):
+    def __init__(self, render_mode=None, n_channel=1, board_size=15, n_target=1):
         assert board_size >= 5
         assert n_target > 0
         assert n_channel in (1, 2, 4)
@@ -69,7 +69,6 @@ class SnakeGameEnv(gym.Env):
         self.ITEM = board_size**2 + 1
         self.HEAD = 1
         self.n_channel = n_channel
-        self.use_simplified_state = use_simplified_state
 
         self.color_gradient = (255 - 100) / (board_size**2)
 
@@ -79,28 +78,13 @@ class SnakeGameEnv(gym.Env):
         self.window_diff = self.window_height - self.window_width
         self.n_target = n_target
         
-        # Constants for simplified state
-        self.FOOD_VAL = self.ITEM
-        self.HEAD_VAL = self.HEAD
-        
-        # Define observation space based on mode
-        if self.use_simplified_state:
-            # Simplified state: 6-element tuple
-            self.observation_space = spaces.Box(
-                low=np.array([0, 0, 0, -1, -1, 0]),
-                high=np.array([1, 1, 1, 1, 1, 3]),
-                shape=(6,),
-                dtype=np.float32
-            )
-        else:
-            # Original observation space
-            self.observation_space = spaces.Box(
-                low=0,
-                high=self.ITEM,
-                shape=(self.n_channel, board_size, board_size),
-                dtype=np.uint32,
-            )
-        
+        # space
+        self.observation_space = spaces.Box(
+            low=0,
+            high=self.ITEM,
+            shape=(self.n_channel, board_size, board_size),
+            dtype=np.uint32,
+        )
         self.action_space = spaces.Discrete(4)
         self._action_to_direction = np.array([[1, 0], [0, 1], [-1, 0], [0, -1]])
         
@@ -170,118 +154,6 @@ class SnakeGameEnv(gym.Env):
         
         # Snake segments for rendering (head + tail positions)
         self.snake_segments = []
-        
-        # Track previous direction for simplified state
-        self.prev_dir = 3  # Start facing right (3)
-        
-        # Helper methods for simplified state
-        self._find_pos = self._create_find_pos()
-        self._is_collision = self._create_is_collision()
-        self._infer_direction = self._create_infer_direction()
-        self._left_dir = self._create_left_dir()
-        self._right_dir = self._create_right_dir()
-        self._step_from_dir = self._create_step_from_dir()
-    
-    def _create_find_pos(self):
-        def find_pos(grid, val):
-            pos = np.argwhere(grid == val)
-            return tuple(pos[0]) if len(pos) else None
-        return find_pos
-    
-    def _create_is_collision(self):
-        def is_collision(grid, r, c):
-            # Hors-grille => collision
-            if r < 0 or r >= grid.shape[0] or c < 0 or c >= grid.shape[1]:
-                return True
-            cell = grid[r, c]
-            # Collision si touche le corps (tout sauf 0 et nourriture)
-            return (cell != 0) and (cell != self.FOOD_VAL)
-        return is_collision
-    
-    def _create_infer_direction(self):
-        def infer_direction(grid, head_pos, prev_dir=3):
-            """
-            Essaie d'inférer la direction via le segment 2 (cou).
-            Si non dispo, on conserve prev_dir.
-            Convention: 0=up, 1=down, 2=left, 3=right
-            """
-            neck = self._find_pos(grid, 2)
-            if head_pos is None or neck is None:
-                return prev_dir
-
-            hr, hc = head_pos
-            nr, nc = neck
-            dr, dc = hr - nr, hc - nc
-
-            if dr == -1 and dc == 0: return 0  # up
-            if dr ==  1 and dc == 0: return 1  # down
-            if dr ==  0 and dc == -1: return 2  # left
-            if dr ==  0 and dc ==  1: return 3  # right
-            return prev_dir
-        return infer_direction
-    
-    def _create_left_dir(self):
-        def left_dir(d):
-            return {0: 2, 2: 1, 1: 3, 3: 0}[d]
-        return left_dir
-    
-    def _create_right_dir(self):
-        def right_dir(d):
-            return {0: 3, 3: 1, 1: 2, 2: 0}[d]
-        return right_dir
-    
-    def _create_step_from_dir(self):
-        def step_from_dir(r, c, d):
-            if d == 0: return r - 1, c
-            if d == 1: return r + 1, c
-            if d == 2: return r, c - 1
-            if d == 3: return r, c + 1
-            return r, c
-        return step_from_dir
-    
-    def _obs_to_state_key(self, obs, prev_dir=3):
-        """
-        obs shape: (1, board_size, board_size) or (board_size, board_size)
-        Retourne: (state_key, new_prev_dir)
-        state_key = array of 6 values
-        """
-        # Handle both obs shapes
-        if len(obs.shape) == 3:
-            if obs.shape[0] == 1:
-                grid = obs[0]
-            else:
-                grid = obs
-        else:
-            grid = obs
-            
-        head = self._find_pos(grid, self.HEAD_VAL)
-        food = self._find_pos(grid, self.FOOD_VAL)
-
-        if head is None or food is None:
-            # Return a default state when head or food not found
-            return np.array([0, 0, 0, 0, 0, prev_dir], dtype=np.float32), prev_dir
-
-        direction = self._infer_direction(grid, head, prev_dir=prev_dir)
-
-        hr, hc = head
-        fr, fc = food
-
-        # nourriture relative
-        food_dir_x = -1 if fc < hc else (1 if fc > hc else 0)
-        food_dir_y = -1 if fr < hr else (1 if fr > hr else 0)
-
-        # danger devant/gauche/droite
-        f_r, f_c = self._step_from_dir(hr, hc, direction)
-        l_r, l_c = self._step_from_dir(hr, hc, self._left_dir(direction))
-        r_r, r_c = self._step_from_dir(hr, hc, self._right_dir(direction))
-
-        danger_front = int(self._is_collision(grid, f_r, f_c))
-        danger_left  = int(self._is_collision(grid, l_r, l_c))
-        danger_right = int(self._is_collision(grid, r_r, r_c))
-
-        state_key = np.array([danger_front, danger_left, danger_right, 
-                              food_dir_x, food_dir_y, direction], dtype=np.float32)
-        return state_key, direction
 
     def _create_fallback_sprite(self, sprite_type):
         """Create a simple fallback sprite if the image file is not found"""
@@ -323,7 +195,6 @@ class SnakeGameEnv(gym.Env):
         self._score = 0
         self.prev_action = 1
         self.snake_direction = Point(1, 0)  # Start moving right
-        self.prev_dir = 3  # Reset previous direction to right
 
         # Build snake segments for rendering
         self._update_snake_segments()
@@ -358,20 +229,21 @@ class SnakeGameEnv(gym.Env):
                 new_target = target_candidate[self.np_random.choice(len(target_candidate))]
                 self.board[new_target[0], new_target[1]] = self.ITEM
 
+    # def _get_obs(self):
+    #     if self.n_channel == 1:
+    #         return self.board[np.newaxis, :, :]
+    #     else:
+    #         return self._split_channel(self.n_channel)
+    
+    # In your _get_obs method:
     def _get_obs(self):
-        if self.use_simplified_state:
-            # Convert board to simplified state
-            state_key, new_dir = self._obs_to_state_key(self.board, self.prev_dir)
-            self.prev_dir = new_dir  # Update stored direction
-            return state_key
+        if self.n_channel == 1:
+            obs = self.board[np.newaxis, :, :]
+            # Normalize to [0, 1]
+            return obs.astype(np.float32) / self.ITEM
         else:
-            if self.n_channel == 1:
-                obs = self.board[np.newaxis, :, :]
-                # Normalize to [0, 1]
-                return obs.astype(np.float32) / self.ITEM
-            else:
-                obs = self._split_channel(self.n_channel)
-                return obs.astype(np.float32) / self.ITEM
+            obs = self._split_channel(self.n_channel)
+            return obs.astype(np.float32) / self.ITEM
 
     def _split_channel(self, n_channel):
         if n_channel == 2:
@@ -397,12 +269,72 @@ class SnakeGameEnv(gym.Env):
             return np.array(channels)
 
     def _get_info(self):
-        return {
-            "snake_length": len(self.snake), 
-            "prev_action": self.prev_action,
-            "prev_dir": self.prev_dir
-        }
+        return {"snake_length": len(self.snake), "prev_action": self.prev_action}
 
+    # def step(self, action: int):
+    #     direction = self._action_to_direction[action]
+        
+    #     # Update snake direction for sprite rotation
+    #     dir_mapping = {
+    #         0: Point(1, 0),   # right
+    #         1: Point(0, 1),   # down
+    #         2: Point(-1, 0),  # left
+    #         3: Point(0, -1),  # up
+    #     }
+    #     self.snake_direction = dir_mapping[action]
+
+    #     # update iteration
+    #     self._n_step += 1
+
+    #     current_head = self.snake[-1]
+    #     current_tail = self.snake[0]
+    #     next_head = current_head + direction
+
+    #     if np.array_equal(next_head, self.snake[-2]):
+    #         next_head = current_head - direction
+
+    #     # get out the board
+    #     if not (0 <= next_head[0] < self.board_size and 0 <= next_head[1] < self.board_size):
+    #         reward = -10
+    #         terminated = True
+    #     # hit the snake
+    #     elif 0 < self.board[next_head[0], next_head[1]] < self.ITEM:
+    #         reward = -10
+    #         terminated = True
+    #     else:
+    #         # blank
+    #         if self.board[next_head[0], next_head[1]] == self.BLANK:
+    #             self.board[current_tail[0], current_tail[1]] = self.BLANK
+    #             self.snake.popleft()
+    #             reward = 0
+    #             terminated = False
+    #         # target
+    #         # self.board[next_head[0], next_head[1]] == self.ITEM
+    #         else:
+    #             self._score += 1
+    #             reward = 10
+    #             self._place_target()
+    #             self.board[next_head[0], next_head[1]] = 0
+    #             if len(self.snake) == self.board_size**2:
+    #                 terminated = True
+    #             else:
+    #                 terminated = False
+    #         self.snake.append(next_head)
+    #         for x, y in self.snake:
+    #             self.board[x][y] += 1
+
+    #     # Update snake segments for rendering
+    #     self._update_snake_segments()
+
+    #     observation = self._get_obs()
+    #     info = self._get_info()
+
+    #     if self.render_mode == "human":
+    #         self.render()
+
+    #     self.prev_action = action
+
+    #     return observation, reward, terminated, False, info
     def step(self, action: int):
         direction = self._action_to_direction[action]
         
@@ -676,3 +608,6 @@ class SnakeGameEnv(gym.Env):
         if self.window is not None:
             pygame.display.quit()
             pygame.quit()
+            
+            
+            

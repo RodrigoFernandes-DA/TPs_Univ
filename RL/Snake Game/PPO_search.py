@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import gymnasium as gym
-from stable_baselines3 import DQN
+from stable_baselines3 import PPO
 from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.callbacks import BaseCallback
 
@@ -34,24 +34,24 @@ class RewardCallback(BaseCallback):
 
 
 # -----------------------------
-# Train DQN
+# Train PPO
 # -----------------------------
 def train():
-    TIMESTEPS = 300_000
+    TIMESTEPS = 1_000_000
     os.makedirs("models", exist_ok=True)
 
-    # 10 hyperparameter combinations for DQN
+    # 10 hyperparameter combinations for PPO
     param_grid = [
-        {"learning_rate": 1e-3, "gamma": 0.99, "buffer_size": 50_000, "learning_starts": 1000, "target_update_interval": 500},
-        {"learning_rate": 5e-4, "gamma": 0.99, "buffer_size": 100_000, "learning_starts": 500, "target_update_interval": 1000},
-        {"learning_rate": 1e-3, "gamma": 0.98, "buffer_size": 50_000, "learning_starts": 1000, "target_update_interval": 250},
-        {"learning_rate": 3e-4, "gamma": 0.99, "buffer_size": 100_000, "learning_starts": 5000, "target_update_interval": 500},
-        {"learning_rate": 1e-4, "gamma": 0.97, "buffer_size": 10_000, "learning_starts": 100, "target_update_interval": 100},
-        {"learning_rate": 7e-4, "gamma": 0.95, "buffer_size": 50_000, "learning_starts": 1000, "target_update_interval": 1000},
-        {"learning_rate": 5e-4, "gamma": 0.98, "buffer_size": 100_000, "learning_starts": 10000, "target_update_interval": 500},
-        {"learning_rate": 3e-4, "gamma": 0.99, "buffer_size": 50_000, "learning_starts": 5000, "target_update_interval": 250},
-        {"learning_rate": 1e-3, "gamma": 0.99, "buffer_size": 10_000, "learning_starts": 100, "target_update_interval": 1000},
-        {"learning_rate": 5e-4, "gamma": 0.97, "buffer_size": 100_000, "learning_starts": 5000, "target_update_interval": 100},
+        {"learning_rate": 3e-4, "gamma": 0.99, "gae_lambda": 0.95, "clip_range": 0.2, "ent_coef": 0.01},
+        {"learning_rate": 1e-3, "gamma": 0.99, "gae_lambda": 0.9, "clip_range": 0.1, "ent_coef": 0.02},
+        {"learning_rate": 2.5e-4, "gamma": 0.98, "gae_lambda": 0.95, "clip_range": 0.2, "ent_coef": 0.005},
+        {"learning_rate": 5e-4, "gamma": 0.99, "gae_lambda": 0.97, "clip_range": 0.3, "ent_coef": 0.001},
+        {"learning_rate": 1e-4, "gamma": 0.97, "gae_lambda": 0.9, "clip_range": 0.2, "ent_coef": 0.02},
+        {"learning_rate": 3e-4, "gamma": 0.95, "gae_lambda": 0.95, "clip_range": 0.1, "ent_coef": 0.01},
+        {"learning_rate": 7e-4, "gamma": 0.99, "gae_lambda": 0.9, "clip_range": 0.3, "ent_coef": 0.005},
+        {"learning_rate": 1e-3, "gamma": 0.98, "gae_lambda": 0.95, "clip_range": 0.2, "ent_coef": 0.001},
+        {"learning_rate": 5e-4, "gamma": 0.99, "gae_lambda": 0.8, "clip_range": 0.2, "ent_coef": 0.02},
+        {"learning_rate": 2.5e-4, "gamma": 0.96, "gae_lambda": 0.99, "clip_range": 0.1, "ent_coef": 0.01},
     ]
 
     best_score = -np.inf
@@ -72,18 +72,19 @@ def train():
         env = Monitor(env)
         callback = RewardCallback()
 
-        model = DQN(
+        model = PPO(
             policy="MlpPolicy",
             env=env,
             learning_rate=params["learning_rate"],
+            n_steps=2048,
+            batch_size=64,
+            n_epochs=10,
             gamma=params["gamma"],
-            buffer_size=params["buffer_size"],
-            learning_starts=params["learning_starts"],
-            target_update_interval=params["target_update_interval"],
-            exploration_final_eps=0.05,  # Fixed exploration parameters
-            exploration_fraction=0.1,
-            train_freq=4,
-            gradient_steps=1,
+            gae_lambda=params["gae_lambda"],
+            clip_range=params["clip_range"],
+            ent_coef=params["ent_coef"],
+            vf_coef=0.5,
+            max_grad_norm=0.5,
             verbose=0,
             device="auto",
         )
@@ -101,7 +102,7 @@ def train():
             best_rewards = rewards
             best_model = model
 
-            best_model_path = f"models/snake_dqn_best"
+            best_model_path = f"models/snake_ppo_best"
             model.save(best_model_path)
             print("New best model saved")
 
@@ -143,7 +144,7 @@ def plot_rewards(rewards, window=50):
     
     plt.xlabel("Episode")
     plt.ylabel("Total Reward")
-    plt.title("DQN Training Rewards (Snake) with Moving Average")
+    plt.title("PPO Training Rewards (Snake) with Moving Average")
     plt.legend()
     plt.grid(alpha=0.3)
     plt.tight_layout()
@@ -161,7 +162,7 @@ def watch(model_path):
         n_target=1,
     )
 
-    model = DQN.load(model_path)
+    model = PPO.load(model_path)
 
     obs, info = env.reset()
     done = False
@@ -188,5 +189,5 @@ if __name__ == "__main__":
     rewards, model_path = train()
     plot_rewards(rewards)
     
-    model_path = "models/snake_dqn_best"
-    watch(model_path)
+    # model_path = "models/snake_ppo_best"
+    # watch(model_path)

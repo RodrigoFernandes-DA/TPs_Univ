@@ -139,7 +139,7 @@ def generate_episode_mc(env, Q, epsilon, itermax):
 
         if terminated or truncated:
             break
-    print(episode)
+    # print(episode)
     return episode
 
 def generate_episode_mc_exploring_starts(env, Q, itermax):
@@ -601,7 +601,7 @@ if __name__ == "__main__":
         algorithm=algorithm_choice,
         alpha=0.1,        
         gamma=0.95,         
-        nb_episodes=200,   
+        nb_episodes=20000,   
         itermax=400,       
         epsilon=0.1,        
         n=3                 

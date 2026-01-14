@@ -37,80 +37,44 @@ class RewardCallback(BaseCallback):
 # Train DQN
 # -----------------------------
 def train():
-    TIMESTEPS = 300_000
-    os.makedirs("models", exist_ok=True)
+    env = SnakeGameEnv(
+        render_mode=None,     # no rendering during training (much faster)
+        n_channel=1,
+        board_size=6,
+        n_target=1,
+    )
 
-    # 10 hyperparameter combinations for DQN
-    param_grid = [
-        {"learning_rate": 1e-3, "gamma": 0.99, "buffer_size": 50_000, "learning_starts": 1000, "target_update_interval": 500},
-        {"learning_rate": 5e-4, "gamma": 0.99, "buffer_size": 100_000, "learning_starts": 500, "target_update_interval": 1000},
-        {"learning_rate": 1e-3, "gamma": 0.98, "buffer_size": 50_000, "learning_starts": 1000, "target_update_interval": 250},
-        {"learning_rate": 3e-4, "gamma": 0.99, "buffer_size": 100_000, "learning_starts": 5000, "target_update_interval": 500},
-        {"learning_rate": 1e-4, "gamma": 0.97, "buffer_size": 10_000, "learning_starts": 100, "target_update_interval": 100},
-        {"learning_rate": 7e-4, "gamma": 0.95, "buffer_size": 50_000, "learning_starts": 1000, "target_update_interval": 1000},
-        {"learning_rate": 5e-4, "gamma": 0.98, "buffer_size": 100_000, "learning_starts": 10000, "target_update_interval": 500},
-        {"learning_rate": 3e-4, "gamma": 0.99, "buffer_size": 50_000, "learning_starts": 5000, "target_update_interval": 250},
-        {"learning_rate": 1e-3, "gamma": 0.99, "buffer_size": 10_000, "learning_starts": 100, "target_update_interval": 1000},
-        {"learning_rate": 5e-4, "gamma": 0.97, "buffer_size": 100_000, "learning_starts": 5000, "target_update_interval": 100},
-    ]
+    env = Monitor(env)
+    callback = RewardCallback()
 
-    best_score = -np.inf
-    best_model = None
-    best_model_path = None
-    best_rewards = None
-
-    for i, params in enumerate(param_grid):
-        print(f"\n=== Training model {i + 1}/{len(param_grid)} ===")
-        print(params)
-
-        env = SnakeGameEnv(
-            render_mode=None,
-            n_channel=1,
-            board_size=6,
-            n_target=1,
-        )
-        env = Monitor(env)
-        callback = RewardCallback()
-
-        model = DQN(
+    model = DQN(
             policy="MlpPolicy",
             env=env,
-            learning_rate=params["learning_rate"],
-            gamma=params["gamma"],
-            buffer_size=params["buffer_size"],
-            learning_starts=params["learning_starts"],
-            target_update_interval=params["target_update_interval"],
+            learning_rate=0.0007,
+            gamma=0.95,
+            buffer_size=10000,
+            learning_starts=5000,
+            target_update_interval=500,
             exploration_final_eps=0.05,  # Fixed exploration parameters
             exploration_fraction=0.1,
             train_freq=4,
             gradient_steps=1,
-            verbose=0,
+            verbose=1,
             device="auto",
         )
 
-        model.learn(total_timesteps=TIMESTEPS, callback=callback)
+    TIMESTEPS = 600_000
+    model.learn(total_timesteps=TIMESTEPS, callback=callback)
 
-        # Evaluation metric: mean reward over last 100 episodes
-        rewards = np.array(callback.episode_rewards)
-        score = rewards[-100:].mean() if len(rewards) >= 100 else rewards.mean()
+    os.makedirs("models", exist_ok=True)
+    model_path = "models/snake_a2c"
+    model.save(model_path)
+    print(f"\nModel saved to {model_path}")
 
-        print(f"Mean reward: {score:.2f}")
+    env.close()
 
-        if score > best_score:
-            best_score = score
-            best_rewards = rewards
-            best_model = model
+    return callback.episode_rewards, model_path
 
-            best_model_path = f"models/snake_dqn_best"
-            model.save(best_model_path)
-            print("New best model saved")
-
-        env.close()
-
-    print(f"\nBest model score: {best_score:.2f}")
-    print(f"Saved at: {best_model_path}")
-
-    return best_rewards, best_model_path
 
 
 # -----------------------------

@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import gymnasium as gym
-from stable_baselines3 import A2C
+from stable_baselines3 import PPO
 from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3.common.torch_layers import NatureCNN
@@ -39,7 +39,7 @@ class RewardCallback(BaseCallback):
 
 
 # -----------------------------
-# Train A2C
+# Train PPO
 # -----------------------------
 def train():
     env = SnakeGameEnv(
@@ -52,20 +52,19 @@ def train():
     env = Monitor(env)
     callback = RewardCallback()
 
-    model = A2C(
+    model = PPO(
         policy="MlpPolicy",
-        # policy="CnnPolicy",
-        # policy_kwargs=policy_kwargs,
         env=env,
-        learning_rate=1e-3,
-        n_steps=5,
-        gamma=0.98,
-        gae_lambda=0.95,
-        ent_coef=0.02,
+        learning_rate=0.00025,
+        n_steps=2048,
+        batch_size=64,
+        n_epochs=10,
+        gamma=0.96,
+        gae_lambda=0.99,
+        clip_range=0.1,
+        ent_coef=0.01,
         vf_coef=0.5,
         max_grad_norm=0.5,
-        use_rms_prop=True,
-        normalize_advantage=True,
         verbose=1,
         device="auto",
     )
@@ -81,21 +80,6 @@ def train():
     env.close()
 
     return callback.episode_rewards, model_path
-
-
-# -----------------------------
-# Plot rewards
-# -----------------------------
-# def plot_rewards(rewards):
-#     plt.figure(figsize=(10, 5))
-#     plt.plot(rewards, label="Episode Reward")
-#     plt.xlabel("Episode")
-#     plt.ylabel("Total Reward")
-#     plt.title("A2C Training Rewards (Snake)")
-#     plt.legend()
-#     plt.grid()
-#     plt.tight_layout()
-#     plt.show()
 
 def plot_rewards(rewards, window=50):
     """
@@ -124,7 +108,7 @@ def plot_rewards(rewards, window=50):
     
     plt.xlabel("Episode")
     plt.ylabel("Total Reward")
-    plt.title("A2C Training Rewards (Snake) with Moving Average")
+    plt.title("PPO Training Rewards (Snake) with Moving Average")
     plt.legend()
     plt.grid(alpha=0.3)
     plt.tight_layout()
@@ -142,7 +126,7 @@ def watch(model_path):
         n_target=1,
     )
 
-    model = A2C.load(model_path)
+    model = PPO.load(model_path)
 
     obs, info = env.reset()
     done = False
