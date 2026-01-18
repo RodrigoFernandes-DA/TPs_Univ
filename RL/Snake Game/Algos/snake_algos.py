@@ -595,7 +595,7 @@ def run_algorithm(algorithm="mc", **kwargs):
 # =========================
 if __name__ == "__main__":
    
-    algorithm_choice = "mc"  # "mc", "mc_es", "sarsa", "td", "nstep"
+    algorithm_choice = "nstep"  # "mc", "mc_es", "sarsa", "td", "nstep"
     
     Q, returns_curve, lengths_curve, algo_name = run_algorithm(
         algorithm=algorithm_choice,

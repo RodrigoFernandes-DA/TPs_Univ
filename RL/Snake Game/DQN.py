@@ -40,7 +40,7 @@ def train():
     env = SnakeGameEnv(
         render_mode=None,     # no rendering during training (much faster)
         n_channel=1,
-        board_size=6,
+        board_size=10,
         n_target=1,
     )
 
@@ -63,11 +63,11 @@ def train():
             device="auto",
         )
 
-    TIMESTEPS = 600_000
+    TIMESTEPS = 1_000_000
     model.learn(total_timesteps=TIMESTEPS, callback=callback)
 
     os.makedirs("models", exist_ok=True)
-    model_path = "models/snake_a2c"
+    model_path = "models/snake_dqn"
     model.save(model_path)
     print(f"\nModel saved to {model_path}")
 
@@ -121,7 +121,7 @@ def watch(model_path):
     env = SnakeGameEnv(
         render_mode="human",
         n_channel=1,
-        board_size=6,
+        board_size=10,
         n_target=1,
     )
 
@@ -151,6 +151,7 @@ def watch(model_path):
 if __name__ == "__main__":
     rewards, model_path = train()
     plot_rewards(rewards)
+    print("Reward = ",np.mean(rewards[-50:]), "+-", np.std(rewards[-50:]))
     
-    model_path = "models/snake_dqn_best"
+    model_path = "models/snake_dqn"
     watch(model_path)

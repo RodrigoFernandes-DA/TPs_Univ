@@ -16,9 +16,6 @@ policy_kwargs = dict(
     features_extractor_kwargs=dict(features_dim=256),
 )
 
-# -----------------------------
-# Reward plotting callback
-# -----------------------------
 class RewardCallback(BaseCallback):
     def __init__(self):
         super().__init__()
@@ -39,11 +36,11 @@ class RewardCallback(BaseCallback):
 
 
 # -----------------------------
-# Train PPO
+# Train 
 # -----------------------------
 def train():
     env = SnakeGameEnv(
-        render_mode=None,     # no rendering during training (much faster)
+        render_mode=None,     
         n_channel=1,
         board_size=10,
         n_target=1,
@@ -73,7 +70,7 @@ def train():
     model.learn(total_timesteps=TIMESTEPS, callback=callback)
 
     os.makedirs("models", exist_ok=True)
-    model_path = "models/snake_a2c"
+    model_path = "models/snake_ppo"
     model.save(model_path)
     print(f"\nModel saved to {model_path}")
 
@@ -82,26 +79,14 @@ def train():
     return callback.episode_rewards, model_path
 
 def plot_rewards(rewards, window=50):
-    """
-    Plot rewards with moving average.
-    
-    Args:
-        rewards: List of reward values per episode
-        window: Size of moving average window (default: 50)
-    """
     plt.figure(figsize=(10, 5))
     
-    # Convert to numpy array for easier calculations
     rewards_array = np.array(rewards)
     
-    # Calculate moving average
     moving_avg = np.convolve(rewards_array, np.ones(window)/window, mode='valid')
     
-    # Plot original rewards (with transparency)
     plt.plot(rewards, alpha=0.3, label=f"Episode Reward", color='blue', linewidth=0.5)
     
-    # Plot moving average
-    # Note: moving_avg starts at episode (window-1) to align properly
     episodes_avg = np.arange(window-1, len(rewards))
     plt.plot(episodes_avg, moving_avg, label=f"{window}-Episode Moving Average", 
              color='red', linewidth=2)
@@ -133,7 +118,7 @@ def watch(model_path):
 
     while True:
         action, _ = model.predict(obs, deterministic=True)
-        action = int(action)   # <-- IMPORTANT
+        action = int(action)
         obs, reward, terminated, truncated, info = env.step(action)
 
         done = terminated or truncated
@@ -146,12 +131,11 @@ def watch(model_path):
     env.close()
 
 
-# -----------------------------
-# Main
-# -----------------------------
+# -------- Main ---------------------
 if __name__ == "__main__":
-    rewards, model_path = train()
-    plot_rewards(rewards)
+    # rewards, model_path = train()
+    # plot_rewards(rewards)
+    # print("Reward = ",np.mean(rewards[-50:]), "+-", np.std(rewards[-50:]))
     
-    model_path = "models/snake_a2c"
+    model_path = "models/snake_ppo"
     watch(model_path)
