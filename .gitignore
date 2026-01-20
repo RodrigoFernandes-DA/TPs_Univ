@@ -6,6 +6,11 @@ ML Sequence/TP5-Transformer/MNIST_5digitsDifficile.pkl
 */MNIST_5digitsDifficile.pkl
 ./ML Graph/TP_GNN_challenge_M2/dataset/
 ML Graph/TP_GNN_challenge_M2/dataset/ZFR/processed/data_train.pt
+S3\ML Sequence\TP5-Transformer\MNIST_5digitsDifficile.pkl
+S3\RL\Snake Game\VideoPresentation.mp4
+S3\RL\Snake Game\videoRL - Feito com o Clipchamp_1768769388741.mp4
+S3\RL\Snake Game\CoelhoFernandes_GadeuMonthe_DeepRL.zip
+S3\ML Graph\TP_GNN_challenge_M2\dataset\ZFR\processed\data_train.pt
 
 # Environments
 venv/
