@@ -7,13 +7,6 @@ from typing import Set, Optional
 
 class WebCrawler:
     def __init__(self, max_depth: int = 3, delay: float = 0.1):
-        """
-        Initialize the web crawler.
-        
-        Args:
-            max_depth: Maximum recursion depth for crawling
-            delay: Delay between requests in seconds (to be polite)
-        """
         self.max_depth = max_depth
         self.delay = delay
         self.visited_urls: Set[str] = set()
@@ -23,16 +16,6 @@ class WebCrawler:
         })
         
     def _should_ignore_url(self, url: str, base_domain: str) -> bool:
-        """
-        Determine if a URL should be ignored based on certain criteria.
-        
-        Args:
-            url: The URL to check
-            base_domain: The base domain to compare against
-            
-        Returns:
-            True if the URL should be ignored, False otherwise
-        """
         parsed_url = urlparse(url)
         
         # Skip if not HTTP/HTTPS
@@ -52,7 +35,7 @@ class WebCrawler:
             '/wiki/Draft:', '/wiki/Draft_talk:', '/wiki/TimedText:', '/wiki/Module:',
             '/wiki/Module_talk:', '/wiki/Media:', '/wiki/Thread:', '/wiki/Summary:',
             '/wiki/Index:', '/wiki/Book:', '/wiki/Main_Page', '/wiki/Aide', '/wiki/Cat%C3%A9gorie',
-            '/wiki/Sp%C3%A9cial', '/wiki/Wikip%C3%A9dia'
+            '/wiki/Sp%C3%A9cial', '/wiki/Wikip%C3%A9dia', '/wiki/Portail:'
         ]
 
         # For Wikipedia, skip administrative and non-article pages
@@ -74,15 +57,6 @@ class WebCrawler:
         return False
         
     def _normalize_url(self, url: str) -> str:
-        """
-        Normalize a URL to avoid duplicates.
-        
-        Args:
-            url: The URL to normalize
-            
-        Returns:
-            Normalized URL
-        """
         parsed = urlparse(url)
         
         # Remove fragments (after #)
@@ -101,15 +75,6 @@ class WebCrawler:
         return urlunparse(parsed)
         
     def _get_html(self, url: str) -> Optional[str]:
-        """
-        Get the HTML content of a URL.
-        
-        Args:
-            url: The URL to fetch
-            
-        Returns:
-            HTML content as string, or None if failed
-        """
         try:
             time.sleep(self.delay)  # Be polite
             response = self.session.get(url, timeout=10)
@@ -127,16 +92,6 @@ class WebCrawler:
             return None
             
     def _extract_links(self, html: str, base_url: str) -> Set[str]:
-        """
-        Extract hyperlinks from HTML content.
-        
-        Args:
-            html: HTML content as string
-            base_url: Base URL for resolving relative links
-            
-        Returns:
-            Set of extracted URLs
-        """
         if not html:
             return set()
             
@@ -157,16 +112,6 @@ class WebCrawler:
         return links
         
     def crawl(self, start_url: str, depth: Optional[int] = None) -> Set[str]:
-        """
-        Main crawling function.
-        
-        Args:
-            start_url: The starting URL for crawling
-            depth: Recursion depth (overrides max_depth if provided)
-            
-        Returns:
-            Set of discovered URLs
-        """
         if depth is None:
             depth = self.max_depth
             
@@ -195,14 +140,6 @@ class WebCrawler:
         return self.visited_urls
         
     def _recursive_crawl(self, url: str, current_depth: int, base_domain: str):
-        """
-        Recursively crawl URLs.
-        
-        Args:
-            url: Current URL to crawl
-            current_depth: Current recursion depth
-            base_domain: Base domain for filtering
-        """
         # Base cases
         if current_depth < 0:
             return
@@ -231,41 +168,22 @@ class WebCrawler:
             self._recursive_crawl(link, current_depth - 1, base_domain)
 
 
-# Main function to be called
 def crawl_wikipedia(start_url: str, recursion_depth: int) -> Set[str]:
-    """
-    Function to crawl Wikipedia starting from a given URL.
-    
-    Args:
-        start_url: The starting Wikipedia URL
-        recursion_depth: Maximum recursion depth
-        
-    Returns:
-        Set of discovered Wikipedia URLs
-    """
-    # Create crawler instance
-    crawler = WebCrawler(max_depth=recursion_depth, delay=0.2)
-    
-    # Start crawling
-    discovered_urls = crawler.crawl(start_url)
+    crawler = WebCrawler(max_depth=recursion_depth, delay=0.2) # create
+    discovered_urls = crawler.crawl(start_url) # crawl
     
     return discovered_urls
 
 
-# Example usage and testing
 if __name__ == "__main__":
-    # Test with a Wikipedia page
-    test_url = "https://en.wikipedia.org/wiki/Web_crawler"
+    test_url = "https://fr.wikipedia.org/wiki/L%27%C3%89vangile_du_monstre_en_spaghettis_volant"
     depth = 2
     
     print("Testing Wikipedia crawler...")
     print("=" * 50)
     
     urls = crawl_wikipedia(test_url, depth)
-    
-    print("\nSample of discovered URLs:")
-    print("=" * 50)
-    for i, url in enumerate(list(urls)[:10]):  # Show first 10 URLs
-        print(f"{i+1}. {url}")
         
     print(f"\nTotal URLs discovered: {len(urls)}")
+
+    
