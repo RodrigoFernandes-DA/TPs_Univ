@@ -17,3 +17,13 @@ def cosine_similarity(vec1: dict, vec2: dict) -> float:
         return 0.0
 
     return dot / (math.sqrt(norm1) * math.sqrt(norm2))
+
+def rank_documents(query_vec: dict, doc_vectors: dict, scheme: str, top_k=10):
+    scores = []
+
+    for url, vectors in doc_vectors.items():
+        sim = cosine_similarity(vectors[scheme], query_vec[scheme])
+        scores.append((url, sim))
+
+    scores.sort(key=lambda x: x[1], reverse=True)
+    return scores[:top_k]

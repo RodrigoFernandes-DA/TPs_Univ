@@ -64,3 +64,27 @@ class DocumentIndexer:
             if tf.get(term, 0) > 0 else 0
             for term in self.terms
         }
+
+
+# output structure:
+# {
+#   "boolean": {term → 0/1},
+#   "tf": {term → tf},
+#   "wf": {term → wf},
+#   "tf_idf": {term → weight},
+#   "wf_idf": {term → weight}
+# }
+
+
+class QueryIndexer(DocumentIndexer):
+    def index_query(self, query: str) -> dict:
+        tokens = tokenize(query)
+        tf = Counter(tokens)
+
+        return {
+            "boolean": self._boolean_model(tf),
+            "tf": self._tf_model(tf),
+            "wf": self._wf_model(tf),
+            "tf_idf": self._tf_idf_model(tf),
+            "wf_idf": self._wf_idf_model(tf),
+        }

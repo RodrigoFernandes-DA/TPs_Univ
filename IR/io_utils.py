@@ -6,7 +6,7 @@ DATA_DIR.mkdir(exist_ok=True)
 
 URLS_FILE = DATA_DIR / "urls.json"
 DICT_FILE = DATA_DIR / "dictionary.json"
-IND_FILE = DATA_DIR / "indexing.json"
+IND_FILE = DATA_DIR / "indexer.json"
 
 
 def save_urls(urls) -> None:
