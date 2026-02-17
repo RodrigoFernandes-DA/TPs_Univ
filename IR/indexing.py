@@ -88,3 +88,4 @@ class QueryIndexer(DocumentIndexer):
             "tf_idf": self._tf_idf_model(tf),
             "wf_idf": self._wf_idf_model(tf),
         }
+

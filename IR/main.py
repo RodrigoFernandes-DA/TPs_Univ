@@ -1,16 +1,17 @@
 from crawler import crawl_wikipedia
 from dictionary import DictionaryBuilder
 from indexing import DocumentIndexer, QueryIndexer
+from similarity import rank_documents
 
 from io_utils import (
     save_urls, load_urls, urls_exist,
     save_dictionary, load_dictionary, dictionary_exist,
-    save_index, load_index, index_exist
+    save_indexer, load_indexer, indexer_exist
 )
 
 if __name__ == "__main__":
     test_url = "https://fr.wikipedia.org/wiki/L%27%C3%89vangile_du_monstre_en_spaghettis_volant"
-    depth = 1
+    depth = 2
 
     print("Testing Wikipedia crawler...")
     print("=" * 50)
@@ -43,28 +44,33 @@ if __name__ == "__main__":
 
 
     # ---- Index building ----
-    if index_exist():
-        print("Loading indexer from cache...")
-        indexer = load_index()
-    else:
-        print("\nIndexing one document...")
-        indexer = DocumentIndexer(dictionary)
+    # if indexer_exist():
+        # print("Loading indexer from cache...")
+        # indexer = load_indexer()
+    # else:
+    print("\nIndexing dictionary...")
+    indexer = DocumentIndexer(dictionary)
 
-        doc_url = next(iter(urls))
-        doc_vectors = indexer.index_document(doc_url)
+    
+    # print("\n",indexer,"\n")
+    # print(type(indexer),"\n")
+    # save_indexer(indexer)
 
-    print("\n Boolean model (first 10 terms):")
-    for term, value in list(doc_vectors["boolean"].items())[:10]:
-        print(term, value)
 
-    print("\n wf_idf model (first 10 terms):")
-    for term, value in list(doc_vectors["wf_idf"].items())[:10]:
-        print(term, value)
+    # doc_url = next(iter(urls))
+    # doc_vectors = indexer.index_document(doc_url)
+    # print("\n Boolean model (first 10 terms):")
+    # for term, value in list(doc_vectors["boolean"].items())[:10]:
+    #     print(term, value)
+
+    # print("\n wf_idf model (first 10 terms):")
+    # for term, value in list(doc_vectors["wf_idf"].items())[:10]:
+    #     print(term, value)
 
 
 ####################################################
 
-
+    # ---- Querying ----
 
     doc_vectors = {}
     for url in urls:

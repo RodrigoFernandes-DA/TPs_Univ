@@ -6,7 +6,7 @@ DATA_DIR.mkdir(exist_ok=True)
 
 URLS_FILE = DATA_DIR / "urls.json"
 DICT_FILE = DATA_DIR / "dictionary.json"
-IND_FILE = DATA_DIR / "indexer.json"
+# IND_FILE = DATA_DIR / "indexer.json"
 
 
 def save_urls(urls) -> None:
@@ -31,14 +31,14 @@ def load_dictionary() -> dict:
         return json.load(f)
 
 
-def save_index(index: dict) -> None:
-    with open(IND_FILE, "w", encoding="utf-8") as f:
-        json.dump(index, f, ensure_ascii=False, indent=2)
+# def save_indexer(index: dict) -> None:
+#     with open(IND_FILE, "w", encoding="utf-8") as f:
+#         json.dump(index, f, ensure_ascii=False, indent=2)
 
 
-def load_index() -> dict:
-    with open(IND_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
+# def load_indexer() -> dict:
+#     with open(IND_FILE, "r", encoding="utf-8") as f:
+#         return json.load(f)
 
 
 def urls_exist() -> bool:
@@ -49,5 +49,5 @@ def dictionary_exist() -> bool:
     return DICT_FILE.exists()
 
 
-def index_exist() -> bool:
-    return IND_FILE.exists()
+# def indexer_exist() -> bool:
+#     return IND_FILE.exists()
