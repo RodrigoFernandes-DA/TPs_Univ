@@ -26,7 +26,8 @@ class WebCrawler:
         if base_domain not in parsed_url.netloc:
             return True
 
-        ignore_paths = [ '/wiki/Special:', '/wiki/Talk:', '/wiki/User:', '/wiki/User_talk:', '/wiki/Wikipedia:', '/wiki/Wikipedia_talk:', '/wiki/File:', '/wiki/MediaWiki:', '/wiki/Template:', '/wiki/Template_talk:', '/wiki/Help:', '/wiki/Help_talk:', '/wiki/Category:', '/wiki/Category_talk:', '/wiki/Portal:', '/wiki/Portal_talk:', '/wiki/Draft:', '/wiki/Draft_talk:', '/wiki/TimedText:', '/wiki/Module:', '/wiki/Module_talk:', '/wiki/Media:', '/wiki/Thread:', '/wiki/Summary:', '/wiki/Index:', '/wiki/Book:', '/wiki/Main_Page', '/wiki/Aide', '/wiki/Cat%C3%A9gorie', '/wiki/Sp%C3%A9cial', '/wiki/Wikip%C3%A9dia', '/wiki/Portail:' ]
+        ignore_paths = [ '/wiki/Special:', '/wiki/Talk:', '/wiki/User:', '/wiki/User_talk:', '/wiki/Wikipedia:', '/wiki/Wikipedia_talk:', '/wiki/File:', '/wiki/MediaWiki:', '/wiki/Template:', '/wiki/Template_talk:', '/wiki/Help:', '/wiki/Help_talk:', '/wiki/Category:', '/wiki/Category_talk:', '/wiki/Portal:', '/wiki/Portal_talk:', '/wiki/Draft:', '/wiki/Draft_talk:', '/wiki/TimedText:', '/wiki/Module:', '/wiki/Module_talk:', '/wiki/Media:', '/wiki/Thread:', '/wiki/Summary:', '/wiki/Index:', '/wiki/Book:', '/wiki/Main_Page', '/wiki/Aide', '/wiki/Cat%C3%A9gorie', '/wiki/Sp%C3%A9cial', '/wiki/Wikip%C3%A9dia', '/wiki/Portail:', '/wiki/Wikipédia:Contact', '/wiki/Anglais',
+                         '/wiki/Mod%C3%A8le:', 'wiki/Projet:', '/wiki/Wikipédia:', '/wiki/Wikisource', 'wiki/Discussion:', '/wiki/18', '/wiki/19' , '/wiki/20', 'wiki/Wiki'   ]
 
         if any(p in parsed_url.path for p in ignore_paths):
             return True

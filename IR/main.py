@@ -6,7 +6,6 @@ from similarity import rank_documents
 from io_utils import (
     save_urls, load_urls, urls_exist,
     save_dictionary, load_dictionary, dictionary_exist,
-    save_indexer, load_indexer, indexer_exist
 )
 
 if __name__ == "__main__":
@@ -39,33 +38,10 @@ if __name__ == "__main__":
 
     print(f"Total unique terms: {len(dictionary)}")
 
-    # for term, stats in list(dictionary.items())[:10]:
-    #     print(term, stats)
 
-
-    # ---- Index building ----
-    # if indexer_exist():
-        # print("Loading indexer from cache...")
-        # indexer = load_indexer()
-    # else:
+    # ---- Indexer ----
     print("\nIndexing dictionary...")
     indexer = DocumentIndexer(dictionary)
-
-    
-    # print("\n",indexer,"\n")
-    # print(type(indexer),"\n")
-    # save_indexer(indexer)
-
-
-    # doc_url = next(iter(urls))
-    # doc_vectors = indexer.index_document(doc_url)
-    # print("\n Boolean model (first 10 terms):")
-    # for term, value in list(doc_vectors["boolean"].items())[:10]:
-    #     print(term, value)
-
-    # print("\n wf_idf model (first 10 terms):")
-    # for term, value in list(doc_vectors["wf_idf"].items())[:10]:
-    #     print(term, value)
 
 
 ####################################################
