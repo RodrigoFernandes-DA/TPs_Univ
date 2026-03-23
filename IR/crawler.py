@@ -27,7 +27,7 @@ class WebCrawler:
             return True
 
         ignore_paths = [ '/wiki/Special:', '/wiki/Talk:', '/wiki/User:', '/wiki/User_talk:', '/wiki/Wikipedia:', '/wiki/Wikipedia_talk:', '/wiki/File:', '/wiki/MediaWiki:', '/wiki/Template:', '/wiki/Template_talk:', '/wiki/Help:', '/wiki/Help_talk:', '/wiki/Category:', '/wiki/Category_talk:', '/wiki/Portal:', '/wiki/Portal_talk:', '/wiki/Draft:', '/wiki/Draft_talk:', '/wiki/TimedText:', '/wiki/Module:', '/wiki/Module_talk:', '/wiki/Media:', '/wiki/Thread:', '/wiki/Summary:', '/wiki/Index:', '/wiki/Book:', '/wiki/Main_Page', '/wiki/Aide', '/wiki/Cat%C3%A9gorie', '/wiki/Sp%C3%A9cial', '/wiki/Wikip%C3%A9dia', '/wiki/Portail:', '/wiki/Wikipédia:Contact', '/wiki/Anglais',
-                         '/wiki/Mod%C3%A8le:', 'wiki/Projet:', '/wiki/Wikipédia:', '/wiki/Wikisource', 'wiki/Discussion:', '/wiki/18', '/wiki/19' , '/wiki/20', 'wiki/Wiki'   ]
+                         '/wiki/Mod%C3%A8le:', 'wiki/Projet:', '/wiki/Wikipédia:', '/wiki/Wikisource', 'wiki/Discussion:', '/wiki/18', '/wiki/19' , '/wiki/20', 'wiki/Wiki', '/w/index.php', '/wiki/Discussion_Wikip%C3%A9dia:Contact', '/Wikipédia:Contact', '/wiki/Mod%C3%A8le:Infobox_Universit%C3%A9'  ]
 
         if any(p in parsed_url.path for p in ignore_paths):
             return True
@@ -117,14 +117,15 @@ class WebCrawler:
         return self.visited_urls
 
 
-def crawl_wikipedia(start_url: str, depth: int) -> Set[str]:
-    crawler = WebCrawler(max_depth=depth, delay=0.2, max_pages=200)
+def crawl_wikipedia(start_url: str, depth: int, max_pages: int) -> Set[str]:
+    crawler = WebCrawler(max_depth=depth, delay=0.2, max_pages=max_pages)
     return crawler.crawl(start_url)
 
 
 if __name__ == "__main__":
     test_url = "https://fr.wikipedia.org/wiki/L%27%C3%89vangile_du_monstre_en_spaghettis_volant"
     depth = 2
+    max_pages = 100
 
-    urls = crawl_wikipedia(test_url, depth)
+    urls = crawl_wikipedia(test_url, depth, max_pages)
     print(f"\nTotal URLs discovered: {len(urls)}")
